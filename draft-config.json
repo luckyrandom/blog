@@ -1,0 +1,36 @@
+{
+  "locals": {
+    "url": "http://localhost:8080",
+    "name": "The Luckyrandom's blog",
+    "owner": "Chenliang Xu",
+    "description": "Some notes for myself 6 months later"
+  },
+  "plugins": [
+    "./node_modules/wintersmith-coffee/plugin.coffee",
+    "wintersmith-nunjucks",
+    "./plugins/contentHelpers.js",
+    "wintersmith-asis",
+    "./plugins/paginator.coffee"
+  ],
+  "require": {
+    "moment": "moment",
+    "_": "underscore",
+    "urlPackage": "url",
+    "typogr": "typogr"
+  },
+  "markdown": {
+    "smartLists": true,
+    "smartypants": true
+  },
+  "paginator": {
+    "template": "index.html",
+    "perPage": 3
+  },
+  "ignore": [
+    "**/config.rb",
+    "**/sass",
+    "**/.sass-cache",
+    "**/.DS_Store",
+    "s3RoutingRules.xml"
+  ]
+}

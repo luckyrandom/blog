@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js fonts-loading" lang="en">
+  <!--<![endif]-->
+  <head>
+    {% block meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    {% endblock %}
+    <link rel="canonical" href="{% block canonical %}{% endblock %}"/>
+    <title>{% block title %}{% endblock %}{% block post_title %} - David Tucker{% endblock %}</title>
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    {% block post_head %}{% endblock %}
+  </head>
+  <body>
+    <header class="header">
+      <div class="content-wrap">
+        {% block header%}
+        <div class="logo">
+          <h1>
+            <a href={{ env.config.baseUrl }}>
+              {{ env.locals.name }}
+            </a>
+        </div>
+        <p class="description"> {{ env.locals.description }} </p>
+        {% endblock %}
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        {% block content %}
+        <h2> Welcom to zombocom! </h2>
+        {% endblock %}
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        {% block footer %}
+        <section class="about">
+          {{ contents['about.md'].html }}
+        </section>
+        <section class="copy">
+          <p> &copy; 2014 {{ env.locals.owner }} &mdash; powerd by &nbsp;
+            <a href='https://github.com/jnordberg/wintersmith'> Wintersmith </a>
+          </p>
+        </section>
+        {% endblock %}
+      </div>
+    </footer>
+  </body>
+</html>
