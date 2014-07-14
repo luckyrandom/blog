@@ -5,7 +5,7 @@
     "moment": "2.3.x",
     "underscore": "1.4.x",
     "typogr": "0.5.x",
-    "wintersmith-asis": "^0.1.2"
+    "wintersmith-asis": "^0.1.3"
   },
   "repository": "none"
 }
