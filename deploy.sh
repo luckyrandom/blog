@@ -19,3 +19,5 @@ wintersmith build
   git commit -m "deploy from commit ${SRC_COMMIT_ID}"
   git push
   )
+
+git push
