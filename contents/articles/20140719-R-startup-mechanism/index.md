@@ -8,6 +8,7 @@ template: articles.html
 R startup with the following steps,
 
 * Set environment variables unless '--no-environ was given on the command line
+ * Load site environment variables from "$R\_HOME/etc/Renviron"
  * Load site environment variables from "$R\_ENVIRON" or "$R\_HOME/etc/Renviron.site"
  * Load user environment variables from ".Renviron" in the current or home directory 
 * Load startup profile files, containing R code. Only the 'base'
