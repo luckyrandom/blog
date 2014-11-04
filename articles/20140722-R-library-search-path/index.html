@@ -18,7 +18,7 @@
     <header class="header">
       <div class="content-wrap">
         
-<h1> R startup mechanism </h1>
+<h1> R library search path </h1>
 
     </header>
     <div id="content">
@@ -26,10 +26,19 @@
         
 <article class="article">
   <section class="content">
-    <p>R startup with the following&nbsp;steps,</p>
+    <p>When ‘library()’ or ‘require()’ is called, R load packages from
+library search paths, which consists of three different&nbsp;directory,</p>
+<ul>
+<li>‘.Library’ is a character string giving the location of the defualt
+library, with default value&nbsp;“$R_HOME/library”</li>
+<li>‘.Library.site’ is a character string vector giving the location of
+the site libraries, with defualt value&nbsp;“$R_HOME/site-library”</li>
+<li>User library paths. There is no variable corresponding to it, but it
+can be get and set with function&nbsp;‘.libPaths()’</li>
+</ul>
+<p>R startup with the following&nbsp;steps,</p>
 <ul>
 <li>Set environment variables unless ‘—no-environ was given on the command line<ul>
-<li>Load site environment variables from&nbsp;“$R_HOME/etc/Renviron”</li>
 <li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
 <li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
 </ul>
@@ -47,7 +56,7 @@ all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
 </ul>
 <h1 id="reference">Reference</h1>
 <ul>
-<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">help(“Startup”)</a></li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
 </ul>
 
   </section>

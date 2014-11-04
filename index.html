@@ -35,6 +35,58 @@
   <header>
     <p class="date">
       <span>
+         22. July 2014
+      </span>
+    </p>
+    <h2>
+      <a href="/articles/20140722-R-library-search-path/"> R library search path </a>
+    </h2>
+  </header>
+  <section class="content">
+    <p>When ‘library()’ or ‘require()’ is called, R load packages from
+library search paths, which consists of three different&nbsp;directory,</p>
+<ul>
+<li>‘.Library’ is a character string giving the location of the defualt
+library, with default value&nbsp;“$R_HOME/library”</li>
+<li>‘.Library.site’ is a character string vector giving the location of
+the site libraries, with defualt value&nbsp;“$R_HOME/site-library”</li>
+<li>User library paths. There is no variable corresponding to it, but it
+can be get and set with function&nbsp;‘.libPaths()’</li>
+</ul>
+<p>R startup with the following&nbsp;steps,</p>
+<ul>
+<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
+<li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
+<li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
+</ul>
+</li>
+<li>Load startup profile files, containing R code. Only the ‘base’
+package is loaded, when the profiles are loaded.<ul>
+<li>Load site profile file from “$R_PROFILE” <span class="caps">OR</span>&nbsp;“$R_HOME/etc/Rprofile.site”</li>
+<li>Load user profile “.Rprofile” from the current or home&nbsp;directory</li>
+</ul>
+</li>
+<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command&nbsp;line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from&nbsp;“.RData”.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
+all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
+</ul>
+
+    <p class="more">
+      <a href="/articles/20140722-R-library-search-path/">more</a>
+    </p>
+  </section>
+     
+</article>
+
+<article class="article intro">
+  <header>
+    <p class="date">
+      <span>
          19. July 2014
       </span>
     </p>
@@ -46,6 +98,7 @@
     <p>R startup with the following&nbsp;steps,</p>
 <ul>
 <li>Set environment variables unless ‘—no-environ was given on the command line<ul>
+<li>Load site environment variables from&nbsp;“$R_HOME/etc/Renviron”</li>
 <li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
 <li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
 </ul>
