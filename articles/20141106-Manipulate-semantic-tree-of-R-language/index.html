@@ -18,30 +18,13 @@
     <header class="header">
       <div class="content-wrap">
         
-        <div class="logo">
-          <h1>
-            <a href=/>
-              The Luckyrandom's blog
-            </a>
-        </div>
-        <p class="description"> Some notes for myself </p>
-        
+<h1> Manipulate semantic tree of R language </h1>
+
     </header>
     <div id="content">
       <div class="content-wrap">
         
-
-<article class="article intro">
-  <header>
-    <p class="date">
-      <span>
-         10. November 2014
-      </span>
-    </p>
-    <h2>
-      <a href="/articles/20141106-Manipulate-semantic-tree-of-R-language/"> Manipulate semantic tree of R language </a>
-    </h2>
-  </header>
+<article class="article">
   <section class="content">
     <p><em>This is basically a reading note on chapter
 <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
@@ -149,143 +132,14 @@ guarantee that the result is semantically correct or
 meaningful. Nonetheless, it is much easier and safer to manipulate R
 code with those functions than manipulate R code as&nbsp;strings.</p>
 
-    <p class="more">
-      <a href="/articles/20141106-Manipulate-semantic-tree-of-R-language/">more</a>
-    </p>
   </section>
-     
 </article>
-
-<article class="article intro">
-  <header>
-    <p class="date">
-      <span>
-         22. July 2014
-      </span>
-    </p>
-    <h2>
-      <a href="/articles/20140722-R-library-search-path/"> R library search path </a>
-    </h2>
-  </header>
-  <section class="content">
-    <p>When ‘library()’ or ‘require()’ is called, R load packages from
-library search paths, which consists of three different&nbsp;directory,</p>
-<ul>
-<li>‘.Library’ is a character string giving the location of the defualt
-library, with default value&nbsp;“$R_HOME/library”</li>
-<li>‘.Library.site’ is a character string vector giving the location of
-the site libraries, with defualt value&nbsp;“$R_HOME/site-library”</li>
-<li>User library paths. There is no variable corresponding to it, but it
-can be get and set with function&nbsp;‘.libPaths()’</li>
-</ul>
-<p>R startup with the following&nbsp;steps,</p>
-<ul>
-<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
-<li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
-<li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
-</ul>
-</li>
-<li>Load startup profile files, containing R code. Only the ‘base’
-package is loaded, when the profiles are loaded.<ul>
-<li>Load site profile file from “$R_PROFILE” <span class="caps">OR</span>&nbsp;“$R_HOME/etc/Rprofile.site”</li>
-<li>Load user profile “.Rprofile” from the current or home&nbsp;directory</li>
-</ul>
-</li>
-<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command&nbsp;line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from&nbsp;“.RData”.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
-all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
-</ul>
-<h1 id="reference">Reference</h1>
-<ul>
-<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
-</ul>
-
-    <p class="more">
-      <a href="/articles/20140722-R-library-search-path/">more</a>
-    </p>
-  </section>
-     
-</article>
-
-<article class="article intro">
-  <header>
-    <p class="date">
-      <span>
-         19. July 2014
-      </span>
-    </p>
-    <h2>
-      <a href="/articles/20140719-R-startup-mechanism/"> R startup mechanism </a>
-    </h2>
-  </header>
-  <section class="content">
-    <p>R startup with the following&nbsp;steps,</p>
-<ul>
-<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
-<li>Load site environment variables from&nbsp;“$R_HOME/etc/Renviron”</li>
-<li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
-<li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
-</ul>
-</li>
-<li>Load startup profile files, containing R code. Only the ‘base’
-package is loaded, when the profiles are loaded.<ul>
-<li>Load site profile file from “$R_PROFILE” <span class="caps">OR</span>&nbsp;“$R_HOME/etc/Rprofile.site”</li>
-<li>Load user profile “.Rprofile” from the current or home&nbsp;directory</li>
-</ul>
-</li>
-<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command&nbsp;line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from&nbsp;“.RData”.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
-all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
-</ul>
-<h1 id="reference">Reference</h1>
-<ul>
-<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">help(“Startup”)</a></li>
-</ul>
-
-    <p class="more">
-      <a href="/articles/20140719-R-startup-mechanism/">more</a>
-    </p>
-  </section>
-     
-</article>
-
-<article class="article intro">
-  <header>
-    <p class="date">
-      <span>
-         01. October 2012
-      </span>
-    </p>
-    <h2>
-      <a href="/articles/some-test/"> Code and stuff! </a>
-    </h2>
-  </header>
-  <section class="content">
-    <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.
-The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
-<p>
-    <p class="more">
-      <a href="/articles/some-test/">more</a>
-    </p>
-  </section>
-     
-</article>
-
 
       </div>
     </div>
     <footer>
       <div class="content-wrap">
         
-<div class="nav">
-  
-  <a href="/archive.html"> Archives </a>
-  
-  
-</div>
-
         <section class="about">
           
         </section>
@@ -295,7 +149,6 @@ The theme used is tomorrow, you can find more themes <a href="http://jmblog.gith
           </p>
         </section>
         
-
       </div>
     </footer>
   </body>

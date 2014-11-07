@@ -5,14 +5,14 @@ h1, h2, h3, h4, h5, h6, p, body, a, img, ul, ol, blockquote, pre {
 
 body {
   font-family: 'Lora', serif;
-  font-size: 21px;
+  font-size: 18px;
   line-height: 1.52;
   background-color: #f8f8f8;
   text-rendering: optimizeLegibility;
 }
 
 .content-wrap {
-  width: 34em;
+  width: 40em;
   margin: 0 auto;
 }
 
@@ -26,17 +26,17 @@ a:hover {
 }
 
 p {
-  margin-bottom: 1.52em;
+  margin-bottom: 0.52em;
 }
 
 pre {
   font-size: 0.9em;
   overflow: auto;
-  background: #fff;
-  border: 1px dashed #d2d2d2;
+  background-color: #fff;
+  /* border: 1px dashed #c2c2c2; */
   border-radius: 0.25em;
-  margin-bottom: 1.8em;
-  padding: 1em;
+  margin-bottom: 0.8em;
+  padding: 1em, 0em, 1em, 0em;
 }
 
 h1 {
@@ -61,12 +61,12 @@ h3 {
 }
 
 ol, ul {
-  margin: 0 1.4em 1.4em 4em;
+  margin: 0 0.4em 0.4em 2em;
 }
 
-li {
-  margin-bottom: 0.5em;
-}
+/* li { */
+/*   margin-bottom: 0.5em; */
+/* } */
 
 blockquote {
   margin: 1.2em 3em;
@@ -84,7 +84,7 @@ hr {
 /* page header */
 
 .header {
-  margin: 3em 0 5em;
+  margin: 3em 0 1.6em;
 }
 
 .header h1 {
@@ -294,23 +294,29 @@ footer .copy, footer .copy a {
 
 code {
   font-family: 'Anonymous Pro', monospace;
-  font-size: 0.85em;
-  color: #000;
+  font-size: 0.8em;
+  padding: 0.1em 0.1em 0.1em;
+  border-radius: 0.3em;
+  position: relative;
+  background-color: #eee;
+  color: #111;
+}
+
+code {
+  top: -0.15ex;
+}
+
+code.lang-r {
+  background-color: #f2f2f2;
 }
 
 pre code {
   display: block;
-  line-height: 1.1;
-}
-
-p code {
-  padding: 0.1em 0.3em 0.2em;
-  border-radius: 0.3em;
-  position: relative;
-  top: -0.15em;
-  background: #444;
-  color: #fff;
-  white-space: nowrap;
+  line-height: 1.4em;
+  padding: 0.4em;
+  background-color: #fff;
+  top: 0ex;
+  /* margin-bottom: 0.6em; */
 }
 
 /* syntax hl stuff */
