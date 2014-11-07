@@ -28,10 +28,13 @@
   },
   "ignore": [
     "articles/_draft_*/**",
+    "articles/*.mk",
+    "articles/*/Makefile",
     "**/config.rb",
     "**/sass",
     "**/.sass-cache",
     "**/.DS_Store",
+    "**/*.Rmd",
     "s3RoutingRules.xml"
   ]
 }
