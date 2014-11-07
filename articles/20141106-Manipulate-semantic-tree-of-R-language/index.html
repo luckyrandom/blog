@@ -42,7 +42,7 @@ so the input must be a valid R&nbsp;expression,</p>
 <pre><code class="lang-r"><span class="comment">## This will lead to an error</span>
 <span class="comment">## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</span>
 </code></pre>
-<p>The return result is a R language object, composed of calls and
+<p>The returned result is a R language object, composed of calls and
 symbols. We can get elements from the semantic&nbsp;tree,</p>
 <pre><code class="lang-r">quote_for[[<span class="number">1</span>]]; quote_for[[<span class="number">2</span>]]; quote_for[[<span class="number">3</span>]]; quote_for[[<span class="number">4</span>]];
 </code></pre>
