@@ -11,6 +11,8 @@ fi
 
 SRC_COMMIT_ID=$(git rev-parse HEAD)
 
+source build.sh
+
 ( cd build
   git add --all * ## The --all option is need to track removals
   git commit -m "deploy from commit ${SRC_COMMIT_ID}"
