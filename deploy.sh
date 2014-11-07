@@ -11,6 +11,16 @@ fi
 
 SRC_COMMIT_ID=$(git rev-parse HEAD)
 
+(cd contents/articles/;
+ for dir in $(ls); do
+     if [ -d $dir ]; then
+         (cd $dir;
+          if [ -e Makefile ]; then
+              make
+          fi)
+     fi
+ done)
+
 rm -rf build/*
 wintersmith build
 
