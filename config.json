@@ -35,6 +35,7 @@
     "**/.sass-cache",
     "**/.DS_Store",
     "**/*.Rmd",
+    "**/.gitignore",
     "s3RoutingRules.xml"
   ]
 }
