@@ -37,5 +37,6 @@
     "**/*.Rmd",
     "**/.gitignore",
     "s3RoutingRules.xml"
-  ]
+  ],
+  "baseUrl": "/blog/"
 }
