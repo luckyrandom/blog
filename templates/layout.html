@@ -11,7 +11,7 @@
     {% endblock %}
     <link rel="canonical" href="{% block canonical %}{% endblock %}"/>
     <title>{% block title %}{% endblock %}{% block post_title %} - Chenliang Xu{% endblock %}</title>
-    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <link rel="stylesheet" href="{{ urlPackage.resolve(env.config.baseUrl, 'css/main.css') }}" type="text/css">
     {% block post_head %}{% endblock %}
   </head>
   <body>
