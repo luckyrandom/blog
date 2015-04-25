@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<rss version="2.0">
+<channel>
+  <title>Luckyrand Blog</title>
+  <link>http://http://blog.luckyrandom.com/</link>
+  <description></description>
+  
+  
+  
+  <item>
+    <title>Manipulate semantic tree of R language</title>
+    <author></author>
+    <link>http://localhost:8080/articles/20141106-Manipulate-semantic-tree-of-R-language/</link>
+    <guid isPermaLink="true">http://localhost:8080/articles/20141106-Manipulate-semantic-tree-of-R-language/</guid>
+    <pubDate>Sun, 09 Nov 2014 21:30:00 -0600</pubDate>
+    <description><![CDATA[ <p><em>This is basically a reading note on chapter
+<a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
+<p>R provides a few functions that expose and manipulate the semantic
+tree of R language. The simplest one is <code>quote</code>, which return the
+semantic tree as is</p>
+<pre><code class="lang-r">quote_for &lt;- quote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s &lt;- s + x})
+quote_for
+</code></pre>
+<pre><code>## for (x in 1:3) {
+##     s &lt;- s + x
+## }
+</code></pre><p>It works on semantic level,
+so the input must be a valid R expression,</p>
+<pre><code class="lang-r"><span class="comment">## This will lead to an error</span>
+<span class="comment">## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</span>
+</code></pre>
+<p>The returned result is a R language object, composed of calls and
+symbols. We can get elements from the semantic tree,</p>
+<pre><code class="lang-r">quote_for[[<span class="number">1</span>]]; quote_for[[<span class="number">2</span>]]; quote_for[[<span class="number">3</span>]]; quote_for[[<span class="number">4</span>]];
+</code></pre>
+<pre><code>## `for`
+</code></pre><pre><code>## x
+</code></pre><pre><code>## 1:3
+</code></pre><pre><code>## {
+##     s &lt;- s + x
+## }
+</code></pre><p>and even set elements,</p>
+<pre><code class="lang-r">quote_for[[<span class="number">3</span>]] &lt;- quote(<span class="number">1</span>:<span class="number">10</span>)
+quote_for
+</code></pre>
+<pre><code>## for (x in 1:10) {
+##     s &lt;- s + x
+## }
+</code></pre><pre><code class="lang-r">s  &lt;- <span class="number">0</span>
+eval(quote_for)
+s
+</code></pre>
+<pre><code>## [1] 55
+</code></pre><p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its
+behavior is unnecessarily complex,</p>
+<ul>
+<li>If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute</li>
+<li>If the argument <code>env</code> is not <code>.GlobalEnv</code><ul>
+<li>If the argument <code>expr</code> is a promise object, get the expression slot
+of the promise without any substitute. The is typically used to
+capture unevaluated expression from caller function.</li>
+<li>If the argument <code>expr</code> is not a promise object, substitute the
+unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></li>
+</ul>
+</li>
+</ul>
+<p>This is a very bad design, that a function might do totally different
+things depending on the running environment. Such a complex design
+makes it hard to guess its behavior.</p>
+<p>Following suggestions in book <em>Advanced R</em>, we define a few helper
+functions, each of which does only one job clearly. Note the name of
+functions are different from Advanced R. The suffix <code>*_s</code> means
+standard evaluation, so it’s the caller’s responsibility to quote code
+explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp
+users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
+<pre><code class="lang-r"><span class="comment">## The definition here may be hard to follow. Please focus on the</span>
+<span class="comment">## usage explained below, instead of the ugly implementation. If you</span>
+<span class="comment">## are curiouse about the implementation, please read Advaned R.</span>
+substitute_q &lt;- <span class="keyword">function</span>(expr, env = emptyenv()) {
+  expr &lt;- substitute(expr)
+  <span class="keyword">if</span> (identical(env, globalenv())) {
+    env &lt;- as.list(env)
+  }
+  eval(substitute(substitute(expr, env), list(expr = expr)))
+}
+
+substitute_s &lt;- <span class="keyword">function</span>(expr, env = emptyenv()) {
+  call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
+  eval(call)
+}
+</code></pre>
+<p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For example,</p>
+<pre><code class="lang-r">quote_for &lt;- quote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + x})
+substitute_s(quote_for, list(x = quote(y)))
+</code></pre>
+<pre><code>## for (y in 1:3) {
+##     s &lt;- s + y
+## }
+</code></pre><p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code>
+automatically, so the caller doesn’t need to quote the code and must
+pass the argument <code>expr</code> lexically. It seems to be convenient, but may
+cause some issue since we cannot pass the quoted code saved in a
+variable to <code>substitute_q</code>.</p>
+<pre><code class="lang-r">substitute_q(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + x}, list(x = quote(y)))
+</code></pre>
+<pre><code>## for (y in 1:3) {
+##     s &lt;- s + y
+## }
+</code></pre><p><code>bquote</code> is similar but provides better control. It return unevaluated
+semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
+<pre><code class="lang-r"><span class="comment">## The result is not meaningful. Why do I do that? Because I can.</span>
+bquote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + .(x)}, list(x = quote(y)))
+</code></pre>
+<pre><code>## for (x in 1:3) {
+##     s &lt;- s + y
+## }
+</code></pre><p>Both <code>substitute_*</code> and <code>bquote</code> work on lexical basis, so there is no
+guarantee that the result is semantically correct or
+meaningful. Nonetheless, it is much easier and safer to manipulate R
+code with those functions than manipulate R code as strings.</p>
+ ]]></description>
+  </item>
+  
+  
+  <item>
+    <title>R library search path</title>
+    <author></author>
+    <link>http://localhost:8080/articles/20140722-R-library-search-path/</link>
+    <guid isPermaLink="true">http://localhost:8080/articles/20140722-R-library-search-path/</guid>
+    <pubDate>Tue, 22 Jul 2014 17:00:00 -0500</pubDate>
+    <description><![CDATA[ <p>When ‘library()’ or ‘require()’ is called, R load packages from
+library search paths, which consists of three different directory,</p>
+<ul>
+<li>‘.Library’ is a character string giving the location of the defualt
+library, with default value “$R_HOME/library”</li>
+<li>‘.Library.site’ is a character string vector giving the location of
+the site libraries, with defualt value “$R_HOME/site-library”</li>
+<li>User library paths. There is no variable corresponding to it, but it
+can be get and set with function ‘.libPaths()’</li>
+</ul>
+<p>R startup with the following steps,</p>
+<ul>
+<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
+<li>Load site environment variables from “$R_ENVIRON” or “$R_HOME/etc/Renviron.site”</li>
+<li>Load user environment variables from “.Renviron” in the current or home directory </li>
+</ul>
+</li>
+<li>Load startup profile files, containing R code. Only the ‘base’
+package is loaded, when the profiles are loaded.<ul>
+<li>Load site profile file from “$R_PROFILE” OR “$R_HOME/etc/Rprofile.site”</li>
+<li>Load user profile “.Rprofile” from the current or home directory</li>
+</ul>
+</li>
+<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from “.RData”.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
+all the packages specified by ‘options(“defaultPackages”)’.</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
+</ul>
+ ]]></description>
+  </item>
+  
+  
+  <item>
+    <title>R startup mechanism</title>
+    <author></author>
+    <link>http://localhost:8080/articles/20140719-R-startup-mechanism/</link>
+    <guid isPermaLink="true">http://localhost:8080/articles/20140719-R-startup-mechanism/</guid>
+    <pubDate>Sat, 19 Jul 2014 12:30:00 -0500</pubDate>
+    <description><![CDATA[ <p>R startup with the following steps,</p>
+<ul>
+<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
+<li>Load site environment variables from “$R_HOME/etc/Renviron”</li>
+<li>Load site environment variables from “$R_ENVIRON” or “$R_HOME/etc/Renviron.site”</li>
+<li>Load user environment variables from “.Renviron” in the current or home directory </li>
+</ul>
+</li>
+<li>Load startup profile files, containing R code. Only the ‘base’
+package is loaded, when the profiles are loaded.<ul>
+<li>Load site profile file from “$R_PROFILE” OR “$R_HOME/etc/Rprofile.site”</li>
+<li>Load user profile “.Rprofile” from the current or home directory</li>
+</ul>
+</li>
+<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from “.RData”.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
+all the packages specified by ‘options(“defaultPackages”)’.</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">help(“Startup”)</a></li>
+</ul>
+ ]]></description>
+  </item>
+  
+  
+  <item>
+    <title>Code and stuff!</title>
+    <author></author>
+    <link>http://localhost:8080/articles/some-test/</link>
+    <guid isPermaLink="true">http://localhost:8080/articles/some-test/</guid>
+    <pubDate>Mon, 01 Oct 2012 15:00:00 -0500</pubDate>
+    <description><![CDATA[ <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.
+The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
+<p><span class="more"></span></p>
+<h3 id="javascript">JavaScript</h3>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">getRandomNumber</span><span class="params">()</span> {</span>
+    <span class="keyword">return</span> <span class="number">4</span>; <span class="comment">// chosen by fair dice roll.</span>
+              <span class="comment">// guaranteed to be random.</span>
+}
+</code></pre>
+<h3 id="coffeescript">CoffeeScript</h3>
+<pre><code class="lang-coffeescript"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span>
+  <span class="comment">### Intellegent design ###</span>
+  <span class="attribute">getDNA</span>:<span class="function"> -&gt;</span>
+    <span class="built_in">print</span> <span class="string">'sequencing...'</span>
+    <span class="keyword">while</span> <span class="literal">true</span>
+      sleep <span class="number">1</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Monkey</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>
+  <span class="attribute">speak</span>:<span class="function"> -&gt;</span>
+    <span class="built_in">print</span> <span class="string">'ah ah ah'</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Human</span> <span class="keyword">extends</span> <span class="title">Monkey</span></span>
+  <span class="attribute">speak</span>:<span class="function"> -&gt;</span>
+    <span class="built_in">print</span> [<span class="string">'yolo'</span> <span class="keyword">unless</span> i % <span class="number">3</span>] + [<span class="string">'swag'</span> <span class="keyword">unless</span> i % <span class="number">5</span>] <span class="keyword">or</span> i <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">1.</span><span class="number">.100</span>]
+</code></pre>
+<h3 id="c">C</h3>
+<pre><code class="lang-c"><span class="preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="keyword">int</span> main(<span class="keyword">void</span>)
+{
+  <span class="built_in">printf</span>(<span class="string">"Hello world\n"</span>);
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+<h3 id="c-">C++</h3>
+<pre><code class="lang-cpp"><span class="preprocessor">#include &lt;iostream&gt;</span>
+
+<span class="keyword">int</span> main()
+{
+  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello World!"</span> &lt;&lt; <span class="built_in">std</span>::endl;
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+<h3 id="c-sharp">C-sharp</h3>
+<pre><code class="lang-cs">class ExampleClass
+{
+    <span class="keyword">static</span> <span class="keyword">void</span> Main()
+    {
+        System.Console.WriteLine(<span class="string">"Hello, world!"</span>);
+    }
+}
+</code></pre>
+<h3 id="erlang">Erlang</h3>
+<pre><code class="lang-erlang">io:format(<span class="string">"~s~n"</span>, [<span class="string">"hello, world"</span>])
+</code></pre>
+<h3 id="go">Go</h3>
+<pre><code class="lang-go"><span class="keyword">package</span> main
+
+<span class="keyword">import</span> <span class="string">"fmt"</span>
+
+<span class="keyword">func</span> main() {
+   fmt.Println(<span class="string">"Hello World!"</span>)
+}
+</code></pre>
+<h3 id="java">Java</h3>
+<pre><code class="lang-java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> {</span>
+   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+       System.out.println(<span class="string">"Hello world!"</span>);
+   }
+}
+</code></pre>
+<h3 id="objectivec">ObjectiveC</h3>
+<pre><code class="lang-objectivec"><span class="preprocessor">#import <span class="title">&lt;stdio.h&gt;</span></span>
+
+<span class="keyword">int</span> main(<span class="keyword">void</span>)
+{
+    printf(<span class="string">"Hello, World!\n"</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+<h3 id="php">PHP</h3>
+<pre><code class="lang-php"><span class="preprocessor">&lt;?php</span> <span class="keyword">echo</span> <span class="string">'Hello, world'</span>; <span class="preprocessor">?&gt;</span>
+</code></pre>
+<h3 id="python">Python</h3>
+<pre><code class="lang-python">print(<span class="string">"Hello World"</span>)
+</code></pre>
+<h3 id="ruby">Ruby</h3>
+<pre><code class="lang-ruby">puts <span class="string">"Hello world!"</span>
+</code></pre>
+ ]]></description>
+  </item>
+  
+</channel>
+</rss>
