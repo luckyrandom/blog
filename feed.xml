@@ -10,8 +10,8 @@
   <item>
     <title>Manipulate semantic tree of R language</title>
     <author></author>
-    <link>http://localhost:8080/articles/20141106-Manipulate-semantic-tree-of-R-language/</link>
-    <guid isPermaLink="true">http://localhost:8080/articles/20141106-Manipulate-semantic-tree-of-R-language/</guid>
+    <link>http://localhost:8080/blog/articles/20141106-Manipulate-semantic-tree-of-R-language/</link>
+    <guid isPermaLink="true">http://localhost:8080/blog/articles/20141106-Manipulate-semantic-tree-of-R-language/</guid>
     <pubDate>Sun, 09 Nov 2014 21:30:00 -0600</pubDate>
     <description><![CDATA[ <p><em>This is basically a reading note on chapter
 <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
@@ -125,8 +125,8 @@ code with those functions than manipulate R code as strings.</p>
   <item>
     <title>R library search path</title>
     <author></author>
-    <link>http://localhost:8080/articles/20140722-R-library-search-path/</link>
-    <guid isPermaLink="true">http://localhost:8080/articles/20140722-R-library-search-path/</guid>
+    <link>http://localhost:8080/blog/articles/20140722-R-library-search-path/</link>
+    <guid isPermaLink="true">http://localhost:8080/blog/articles/20140722-R-library-search-path/</guid>
     <pubDate>Tue, 22 Jul 2014 17:00:00 -0500</pubDate>
     <description><![CDATA[ <p>When ‘library()’ or ‘require()’ is called, R load packages from
 library search paths, which consists of three different directory,</p>
@@ -167,8 +167,8 @@ all the packages specified by ‘options(“defaultPackages”)’.</li>
   <item>
     <title>R startup mechanism</title>
     <author></author>
-    <link>http://localhost:8080/articles/20140719-R-startup-mechanism/</link>
-    <guid isPermaLink="true">http://localhost:8080/articles/20140719-R-startup-mechanism/</guid>
+    <link>http://localhost:8080/blog/articles/20140719-R-startup-mechanism/</link>
+    <guid isPermaLink="true">http://localhost:8080/blog/articles/20140719-R-startup-mechanism/</guid>
     <pubDate>Sat, 19 Jul 2014 12:30:00 -0500</pubDate>
     <description><![CDATA[ <p>R startup with the following steps,</p>
 <ul>
@@ -200,8 +200,8 @@ all the packages specified by ‘options(“defaultPackages”)’.</li>
   <item>
     <title>Code and stuff!</title>
     <author></author>
-    <link>http://localhost:8080/articles/some-test/</link>
-    <guid isPermaLink="true">http://localhost:8080/articles/some-test/</guid>
+    <link>http://localhost:8080/blog/articles/some-test/</link>
+    <guid isPermaLink="true">http://localhost:8080/blog/articles/some-test/</guid>
     <pubDate>Mon, 01 Oct 2012 15:00:00 -0500</pubDate>
     <description><![CDATA[ <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.
 The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
