@@ -10,7 +10,8 @@
     "wintersmith-nunjucks",
     "./plugins/contentHelpers.js",
     "wintersmith-asis",
-    "./plugins/paginator.coffee"
+    "./plugins/paginator.coffee",
+    "./node_modules/wintersmith-pandoc/"
   ],
   "require": {
     "moment": "moment",
