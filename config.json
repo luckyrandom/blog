@@ -37,7 +37,9 @@
     "**/.DS_Store",
     "**/*.Rmd",
     "**/.gitignore",
-    "s3RoutingRules.xml"
+    "s3RoutingRules.xml",
+    "articles/*/cache/**",
+    "**/311_Service_Requests_from_2010_to_Present.csv"
   ],
   "baseUrl": "/blog/"
 }
