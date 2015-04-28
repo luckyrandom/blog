@@ -144,6 +144,11 @@ div.post-date {
     color:gray;
 }
 
+div.share-button {
+    text-align:center;
+    color:gray;
+}
+
 h1.subtitle {
     font-size: 1.5em;
     text-align:center;
