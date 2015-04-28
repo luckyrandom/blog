@@ -3,7 +3,7 @@
     "url": "http://localhost:8080",
     "name": "The Luckyrandom's blog",
     "owner": "Chenliang Xu",
-    "description": "Some notes for myself"
+    "description": "I enjoy thinking; I know statistics; I can code."
   },
   "plugins": [
     "./node_modules/wintersmith-coffee/plugin.coffee",
