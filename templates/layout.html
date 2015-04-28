@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="{{ urlPackage.resolve(env.config.baseUrl, 'css/main.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ urlPackage.resolve(env.config.baseUrl, 'highlight/styles/tomorrow.css') }}">
     <script src="{{ urlPackage.resolve(env.config.baseUrl, 'highlight/highlight.pack.js') }}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="{{ urlPackage.resolve(env.config.baseUrl, 'javascript/highlight-pandoc.js') }}"></script>
     {% block post_head %}{% endblock %}
   </head>
   <body>
