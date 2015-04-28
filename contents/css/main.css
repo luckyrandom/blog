@@ -346,6 +346,10 @@ pre.r code {
     background: #eee;
 }
 
+p code {
+    background: #eee;
+}
+
 pre code {
   display: block;
   line-height: 1.4em;
