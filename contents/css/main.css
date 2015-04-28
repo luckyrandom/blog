@@ -91,6 +91,7 @@ hr {
 .header .content-wrap {
     background-color: purple;
     color: white;
+    padding-bottom: 0.1em;
 }
 
 .header h1 {
