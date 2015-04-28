@@ -40,9 +40,10 @@ pre {
 }
 
 h1 {
-  font-size: 2em;
-  margin-bottom: 1em;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
 }
+
 
 h2 {
   font-size: 1.2em;
@@ -87,6 +88,11 @@ hr {
   margin: 3em 0 1.6em;
 }
 
+.header .content-wrap {
+    background-color: purple;
+    color: white;
+}
+
 .header h1 {
   font-size: 2.6em;
   text-align: center;
@@ -96,7 +102,7 @@ hr {
 
 .header a, .header a:hover {
   text-decoration: none;
-  color: #171717;
+  color: white;
 }
 
 .header .author {
@@ -126,6 +132,23 @@ body.article-detail > header h1 {
 body.article-detail > header {
   margin-bottom: 3em;
 }
+
+/* post header */
+h1.title {
+    font-size: 1.8em;
+    text-align:center;
+}
+
+div.post-date {
+    text-align:center;
+    color:gray;
+}
+
+h1.subtitle {
+    font-size: 1.5em;
+    text-align:center;
+}
+
 
 /* page footer */
 
@@ -204,7 +227,7 @@ footer .copy, footer .copy a {
 }
 
 .article.intro .content p {
-  display: inline;
+  display: block;
 }
 
 .article.intro .content .more {
@@ -213,9 +236,9 @@ footer .copy, footer .copy a {
   padding-left: 0.3em;
 }
 
-.article .content img {
+.article img {
   display: block;
-  width: 100%;
+  width: 90%;
 }
 
 .more, .date {
@@ -294,28 +317,35 @@ footer .copy, footer .copy a {
 
 code {
   font-family: 'Anonymous Pro', monospace;
-  font-size: 0.8em;
+  font-size: 0.75em;
   padding: 0.1em 0.1em 0.1em;
   border-radius: 0.3em;
   position: relative;
-  background-color: #eee;
   color: #111;
 }
 
 code {
-  top: -0.15ex;
+    top: -0.15ex;
+    
 }
 
-code.lang-r {
+pre.r {
   background-color: #f2f2f2;
+}
+
+pre.r code {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background: #eee;
 }
 
 pre code {
   display: block;
   line-height: 1.4em;
   padding: 0.4em;
-  background-color: #fff;
   top: 0ex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   /* margin-bottom: 0.6em; */
 }
 
@@ -393,7 +423,7 @@ code.lang-markdown .bullet {
   body { font-size: 18px; }
 }
 
-@media (max-width: 690px) {
+@media (max-width: 720px) {
   .content-wrap {
     width: auto;
     padding: 0 1em;
@@ -440,4 +470,3 @@ code.lang-markdown .bullet {
     margin-bottom: 1em;
   }
 }
-
