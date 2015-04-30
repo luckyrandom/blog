@@ -4,14 +4,7 @@
 {% block meta %}
 		{{ super() }}
 		{% if page.metadata.keywords %}<meta name="keywords" content="{{ page.metadata.keywords }}">{% endif %}
-		{% if page.metadata.ogimage %}
-		{% set ogImageAbsolutePath = env.helpers.getPathToLocalAssetWithFilename(page, page.metadata.ogimage) %}
-		<meta property="og:image" content="{{ url }}{{ ogImageAbsolutePath }}">
-		{% else %}
-		<meta property="og:image" content="{{ url }}{{ defaultOGImage }}">
-		{% endif %}
-		<meta property="og:title" content="{{ page.title }}">
-		<meta property="og:url" content="{{ url }}{{ page.url }}">
+                <meta property="og:title" content="{{ page.title }}">
 		<meta property="og:site_name" content="{{ siteName }}">
 		<meta property="og:type" content="blog">
 		<meta property="og:description" content="{{ page.metadata.short_description }}">
