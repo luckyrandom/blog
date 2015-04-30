@@ -1,19 +1,63 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<rss version="2.0">
-<channel>
-  <title>Luckyrand Blog</title>
-  <link>http://http://blog.luckyrandom.com/</link>
-  <description></description>
-  
-  
-  
-  <item>
-    <title>Big data analytics with dplyr and SQLite</title>
-    <author></author>
-    <link>http://localhost:8080/blog/articles/00050-311-service/</link>
-    <guid isPermaLink="true">http://localhost:8080/blog/articles/00050-311-service/</guid>
-    <pubDate>Wed, 29 Apr 2015 18:00:00 -0500</pubDate>
-    <description><![CDATA[ <style type="text/css">
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js fonts-loading" lang="en">
+  <!--<![endif]-->
+  <head>
+    
+		
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+		
+		
+		<meta property="og:image" content="http://localhost:8080">
+		
+		<meta property="og:title" content="Big data analytics with dplyr and SQLite">
+		<meta property="og:url" content="http://localhost:8080/blog/articles/00050-311-service/">
+		<meta property="og:site_name" content="">
+		<meta property="og:type" content="blog">
+		<meta property="og:description" content="">
+
+    <link rel="canonical" href="http://localhost:8080/blog/articles/00050-311-service/"/>
+    <title>Big data analytics with dplyr and SQLite - Chenliang Xu</title>
+    <link rel="stylesheet" href="/blog/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/blog/highlight/styles/tomorrow.css">
+    <script src="/blog/highlight/highlight.pack.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="/blog/javascript/highlight-pandoc.js"></script>
+    
+  </head>
+  <body>
+    <header class="header">
+      <div class="content-wrap">
+        
+        <div class="logo">
+          <h1>
+            <a href=/blog/>
+              The Luckyrandom's blog
+            </a>
+        </div>
+        <p class="description"> I enjoy thinking; I know statistics; I can code. </p>
+        
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        
+		<div class="row">
+			<div class="twelve columns">
+				<div class="article">
+                                  <h1 class="title">Big data analytics with dplyr and SQLite</h1>
+                                  <div class="post-date">2015-04-29</div>
+                                  <div class="share-button">
+                                  <a href="https://twitter.com/share" class="twitter-share-button" data-text = "Big data analytics with dplyr and SQLite">Tweet</a>
+                                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                  </div>
+                                  
+					<h1 class="subtitle">Reimplement analytics of NYC 311 service data in R</h1>
+					
+					<style type="text/css">
 div.code_chunk {
 border-left: rgb(123, 218, 123);
 border-left-width: thick;
@@ -893,7 +937,7 @@ ordered_asis &lt;- function(x) {
   xlab(&quot;Agency&quot;) + ylab(&quot;Number of Complaints&quot;) +
   geom_point(color = &quot;#01AFE1&quot; ) + scale_y_log10(labels = comma_format()) +
 theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
 </div>
 <h1 id="most-common-complaint">Most common complaint</h1>
 <div class="code_chunk">
@@ -983,7 +1027,7 @@ service %&gt;%
   xlab(&quot;&quot;) + ylab(&quot;Number of Complaints&quot;) +
   scale_y_continuous(labels = comma_format()) +
   theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
 </div>
 <h1 id="the-most-common-complaint-in-each-city">The most common complaint in each city</h1>
 <div class="code_chunk">
@@ -1055,7 +1099,7 @@ city_top &lt;- city_ordered[1:20]</code></pre>
   scale_fill_discrete(h = c(0, 360 * 7)) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;))</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(182, 121, 68)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
@@ -1069,7 +1113,7 @@ city_top &lt;- city_ordered[1:20]</code></pre>
   xlab(NULL) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;))</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
 </div>
 And if we are more interested in proportion of complaint type for each city.
 <div class="code_chunk">
@@ -1085,7 +1129,7 @@ And if we are more interested in proportion of complaint type for each city.
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
 </div>
 <h1 id="filter-rows-with-time-stamp-strings">Filter rows with time stamp strings</h1>
 <div class="code_chunk">
@@ -1380,7 +1424,7 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
 
 <pre class="r"><code>ggplot(hour_count, aes(x = hour, y = n)) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
 </div>
 <p>The count of hour 0 is unusually large. Let’s check their values.</p>
 <div class="code_chunk">
@@ -1468,7 +1512,7 @@ Those “00:00:00” must mean NA.
 <pre class="r"><code>ggplot(na.omit(hour_count_fix_00),
        aes(x = hour, y = n)) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
+<img src="/blog/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
 </div>
 <h1 id="filter-noise-complaints-by-hour">Filter noise complaints by hour</h1>
 <div class="code_chunk">
@@ -1586,7 +1630,7 @@ Those “00:00:00” must mean NA.
        aes(x = hour, y = n)) +
   ylab(&quot;Number of complaints&quot;) + scale_y_continuous(labels = comma_format()) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
+<img src="/blog/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
 </div>
 <h1 id="segregate-complaints-by-hour">Segregate complaints by hour</h1>
 Count complatins by 15 minute interval
@@ -1630,7 +1674,7 @@ Count complatins by 15 minute interval
   scale_fill_discrete(h = c(0, 360 * 5 )) +
   scale_y_continuous(labels = comma_format()) +
   xlab(NULL)</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
+<img src="/blog/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
 </div>
 <h1 id="complaints-per-15-minute-interval">Complaints per 15 minute interval</h1>
 <div class="code_chunk">
@@ -1694,7 +1738,7 @@ ggplot(service_interval_count,
                    labels = date_format(&quot;%H:%M&quot;)) +
   xlab(&quot;Date&quot;) + ylab(&quot;Time Interval&quot;) +
   theme(panel.grid = element_blank())</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
+<img src="/blog/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
 </div>
 <p>The above plot is misleading. The white spots represent missing data, while missing from count table actually means 0, which should be colored as green.</p>
 <div class="code_chunk">
@@ -1769,7 +1813,7 @@ ggplot(service_interval_count,
                    labels = date_format(&quot;%H:%M&quot;)) +
   xlab(&quot;Date&quot;) + ylab(&quot;15 Minutes Time Interval&quot;) +
   theme(panel.grid = element_blank())</code></pre>
-<img src="http://localhost:8080/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
+<img src="/blog/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
 </div>
 <h1 id="session-info">Session info</h1>
 Print session info for the good of reproducibility.
@@ -1813,227 +1857,43 @@ Print session info for the good of reproducibility.
 ##  scales       0.2.4      2014-04-22 CRAN (R 3.2.0)                  
 ##  stringr    * 0.6.2      2012-12-06 CRAN (R 3.2.0)</code></pre>
 </div>
- ]]></description>
-  </item>
-  
-  
-  <item>
-    <title>Manipulate semantic tree of R language</title>
-    <author></author>
-    <link>http://localhost:8080/blog/articles/00040-Manipulate-semantic-tree-of-R-language/</link>
-    <guid isPermaLink="true">http://localhost:8080/blog/articles/00040-Manipulate-semantic-tree-of-R-language/</guid>
-    <pubDate>Sun, 09 Nov 2014 21:30:00 -0600</pubDate>
-    <description><![CDATA[ <p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
-<p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as is</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s &lt;- s + x})
-quote_for</code></pre>
-<pre><code>## for (x in 1:3) {
-##     s &lt;- s + x
-## }</code></pre>
-<p>It works on semantic level, so the input must be a valid R expression,</p>
-<pre class="r"><code>## This will lead to an error
-## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre>
-<p>The returned result is a R language object, composed of calls and symbols. We can get elements from the semantic tree,</p>
-<pre class="r"><code>quote_for[[1]]; quote_for[[2]]; quote_for[[3]]; quote_for[[4]];</code></pre>
-<pre><code>## `for`</code></pre>
-<pre><code>## x</code></pre>
-<pre><code>## 1:3</code></pre>
-<pre><code>## {
-##     s &lt;- s + x
-## }</code></pre>
-<p>and even set elements,</p>
-<pre class="r"><code>quote_for[[3]] &lt;- quote(1:10)
-quote_for</code></pre>
-<pre><code>## for (x in 1:10) {
-##     s &lt;- s + x
-## }</code></pre>
-<pre class="r"><code>s  &lt;- 0
-eval(quote_for)
-s</code></pre>
-<pre><code>## [1] 55</code></pre>
-<p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its behavior is unnecessarily complex, - If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute - If the argument <code>env</code> is not <code>.GlobalEnv</code> - If the argument <code>expr</code> is a promise object, get the expression slot of the promise without any substitute. The is typically used to capture unevaluated expression from caller function. - If the argument <code>expr</code> is not a promise object, substitute the unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></p>
-<p>This is a very bad design, that a function might do totally different things depending on the running environment. Such a complex design makes it hard to guess its behavior.</p>
-<p>Following suggestions in book <em>Advanced R</em>, we define a few helper functions, each of which does only one job clearly. Note the name of functions are different from Advanced R. The suffix <code>*_s</code> means standard evaluation, so it’s the caller’s responsibility to quote code explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
-<pre class="r"><code>## The definition here may be hard to follow. Please focus on the
-## usage explained below, instead of the ugly implementation. If you
-## are curiouse about the implementation, please read Advaned R.
-substitute_q &lt;- function(expr, env = emptyenv()) {
-  expr &lt;- substitute(expr)
-  if (identical(env, globalenv())) {
-    env &lt;- as.list(env)
-  }
-  eval(substitute(substitute(expr, env), list(expr = expr)))
-}
 
-substitute_s &lt;- function(expr, env = emptyenv()) {
-  call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
-  eval(call)
-}</code></pre>
-<p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For example,</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s  &lt;- s + x})
-substitute_s(quote_for, list(x = quote(y)))</code></pre>
-<pre><code>## for (y in 1:3) {
-##     s &lt;- s + y
-## }</code></pre>
-<p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code> automatically, so the caller doesn’t need to quote the code and must pass the argument <code>expr</code> lexically. It seems to be convenient, but may cause some issue since we cannot pass the quoted code saved in a variable to <code>substitute_q</code>.</p>
-<pre class="r"><code>substitute_q(for(x in 1:3){ s  &lt;- s + x}, list(x = quote(y)))</code></pre>
-<pre><code>## for (y in 1:3) {
-##     s &lt;- s + y
-## }</code></pre>
-<p><code>bquote</code> is similar but provides better control. It return unevaluated semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
-<pre class="r"><code>## The result is not meaningful. Why do I do that? Because I can.
-bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
-<pre><code>## for (x in 1:3) {
-##     s &lt;- s + y
-## }</code></pre>
-<p>Both <code>substitute_*</code> and <code>bquote</code> work on lexical basis, so there is no guarantee that the result is semantically correct or meaningful. Nonetheless, it is much easier and safer to manipulate R code with those functions than manipulate R code as strings.</p>
- ]]></description>
-  </item>
-  
-  
-  <item>
-    <title>R library search path</title>
-    <author></author>
-    <link>http://localhost:8080/blog/articles/00030-R-library-search-path/</link>
-    <guid isPermaLink="true">http://localhost:8080/blog/articles/00030-R-library-search-path/</guid>
-    <pubDate>Tue, 22 Jul 2014 17:00:00 -0500</pubDate>
-    <description><![CDATA[ <p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different directory,</p>
-<ul>
-<li>‘.Library’ is a character string giving the location of the defualt library, with default value <code>$R_HOME/library</code></li>
-<li>‘.Library.site’ is a character string vector giving the location of the site libraries, with defualt value <code>$R_HOME/site-library</code></li>
-<li>User library paths. There is no variable corresponding to it, but it can be get and set with function ‘.libPaths()’</li>
-</ul>
-<p>R startup with the following steps,</p>
-<ul>
-<li>Set environment variables unless ’–no-environ was given on the command line</li>
-<li>Load site environment variables from <code>$R_ENVIRON</code> or <code>$R_HOME/etc/Renviron.site</code></li>
-<li>Load user environment variables from <code>.Renviron</code> in the current or home directory</li>
-<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are loaded.</li>
-<li>Load site profile file from <code>$R_PROFILE</code> OR <code>$R_HOME/etc/Rprofile.site</code></li>
-<li>Load user profile <code>.Rprofile</code> from the current or home directory</li>
-<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by ‘options(“defaultPackages”)’.</li>
-</ul>
-<h1 id="reference">Reference</h1>
-<ul>
-<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
-</ul>
- ]]></description>
-  </item>
-  
-  
-  <item>
-    <title>R startup mechanism</title>
-    <author></author>
-    <link>http://localhost:8080/blog/articles/00020-R-startup-mechanism/</link>
-    <guid isPermaLink="true">http://localhost:8080/blog/articles/00020-R-startup-mechanism/</guid>
-    <pubDate>Sat, 19 Jul 2014 12:30:00 -0500</pubDate>
-    <description><![CDATA[ <p>R startup with the following steps,</p>
-<ul>
-<li>Set environment variables unless ’–no-environ was given on the command line</li>
-<li>Load site environment variables from <code>$R\_HOME/etc/Renviron</code></li>
-<li>Load site environment variables from <code>$R\_ENVIRON</code> or <code>$R\_HOME/etc/Renviron.site</code></li>
-<li>Load user environment variables from <code>.Renviron</code> in the current or home directory</li>
-<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are loaded.</li>
-<li>Load site profile file from <code>$R\_PROFILE</code> OR <code>$R\_HOME/etc/Rprofile.site</code></li>
-<li>Load user profile <code>.Rprofile</code> from the current or home directory</li>
-<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by ‘options(<code>defaultPackages</code>)’.</li>
-</ul>
-<h1 id="reference">Reference</h1>
-<ul>
-<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">help(“Startup”)</a></li>
-</ul>
- ]]></description>
-  </item>
-  
-  
-  <item>
-    <title>Code and stuff!</title>
-    <author></author>
-    <link>http://localhost:8080/blog/articles/00010-some-test/</link>
-    <guid isPermaLink="true">http://localhost:8080/blog/articles/00010-some-test/</guid>
-    <pubDate>Mon, 01 Oct 2012 15:00:00 -0500</pubDate>
-    <description><![CDATA[ <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>. The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
-<p><span class="more"></span></p>
-<h3 id="javascript">JavaScript</h3>
-<pre class="javascript"><code>function getRandomNumber() {
-    return 4; // chosen by fair dice roll.
-              // guaranteed to be random.
-}</code></pre>
-<h3 id="coffeescript">CoffeeScript</h3>
-<pre class="coffeescript"><code>class Animal
-  ### Intellegent design ###
-  getDNA: -&gt;
-    print &#39;sequencing...&#39;
-    while true
-      sleep 1
 
-class Monkey extends Animal
-  speak: -&gt;
-    print &#39;ah ah ah&#39;
+                                        <!--  disqus  -->
+                                        <div id="disqus_thread"></div>
+                                        <script type="text/javascript">
+                                          /* * * CONFIGURATION VARIABLES * * */
+                                          var disqus_shortname = 'luckyrandom-blog';
+                                          var disqus_identifier = '/blog/articles/00050-311-service/';
+                                          /* * * DON'T EDIT BELOW THIS LINE * * */
+                                          (function() {
+                                          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                          })();
+                                        </script>
+                                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+				</div>
+			</div>
+		</div>
 
-class Human extends Monkey
-  speak: -&gt;
-    print [&#39;yolo&#39; unless i % 3] + [&#39;swag&#39; unless i % 5] or i for i in [1..100]</code></pre>
-<h3 id="c">C</h3>
-<pre class="c"><code>#include &lt;stdio.h&gt;
+                
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        
+        <section class="about">
+          
 
-int main(void)
-{
-  printf(&quot;Hello world\n&quot;);
-  return 0;
-}</code></pre>
-<h3 id="c-1">C++</h3>
-<pre class="cpp"><code>#include &lt;iostream&gt;
-
-int main()
-{
-  std::cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; std::endl;
-  return 0;
-}</code></pre>
-<h3 id="c-sharp">C-sharp</h3>
-<pre class="cs"><code>class ExampleClass
-{
-    static void Main()
-    {
-        System.Console.WriteLine(&quot;Hello, world!&quot;);
-    }
-}</code></pre>
-<h3 id="erlang">Erlang</h3>
-<pre class="erlang"><code>io:format(&quot;~s~n&quot;, [&quot;hello, world&quot;])</code></pre>
-<h3 id="go">Go</h3>
-<pre class="go"><code>package main
-
-import &quot;fmt&quot;
-
-func main() {
-   fmt.Println(&quot;Hello World!&quot;)
-}</code></pre>
-<h3 id="java">Java</h3>
-<pre class="java"><code>public class HelloWorld {
-   public static void main(String[] args) {
-       System.out.println(&quot;Hello world!&quot;);
-   }
-}</code></pre>
-<h3 id="objectivec">ObjectiveC</h3>
-<pre class="objectivec"><code>#import &lt;stdio.h&gt;
-
-int main(void)
-{
-    printf(&quot;Hello, World!\n&quot;);
-    return 0;
-}</code></pre>
-<h3 id="php">PHP</h3>
-<pre class="php"><code>&lt;?php echo &#39;Hello, world&#39;; ?&gt;</code></pre>
-<h3 id="python">Python</h3>
-<pre class="python"><code>print(&quot;Hello World&quot;)</code></pre>
-<h3 id="ruby">Ruby</h3>
-<pre class="ruby"><code>puts &quot;Hello world!&quot;</code></pre>
- ]]></description>
-  </item>
-  
-</channel>
-</rss>
+        </section>
+        <section class="copy">
+          <p> &copy; 2014 Chenliang Xu &mdash; powerd by &nbsp;
+            <a href='https://github.com/jnordberg/wintersmith'> Wintersmith </a>
+          </p>
+        </section>
+        
+      </div>
+    </footer>
+  </body>
+</html>

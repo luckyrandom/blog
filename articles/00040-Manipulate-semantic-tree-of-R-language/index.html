@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js fonts-loading" lang="en">
+  <!--<![endif]-->
+  <head>
+    
+		
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+		
+		
+		<meta property="og:image" content="http://localhost:8080">
+		
+		<meta property="og:title" content="Manipulate semantic tree of R language">
+		<meta property="og:url" content="http://localhost:8080/blog/articles/00040-Manipulate-semantic-tree-of-R-language/">
+		<meta property="og:site_name" content="">
+		<meta property="og:type" content="blog">
+		<meta property="og:description" content="">
+
+    <link rel="canonical" href="http://localhost:8080/blog/articles/00040-Manipulate-semantic-tree-of-R-language/"/>
+    <title>Manipulate semantic tree of R language - Chenliang Xu</title>
+    <link rel="stylesheet" href="/blog/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/blog/highlight/styles/tomorrow.css">
+    <script src="/blog/highlight/highlight.pack.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="/blog/javascript/highlight-pandoc.js"></script>
+    
+  </head>
+  <body>
+    <header class="header">
+      <div class="content-wrap">
+        
+        <div class="logo">
+          <h1>
+            <a href=/blog/>
+              The Luckyrandom's blog
+            </a>
+        </div>
+        <p class="description"> I enjoy thinking; I know statistics; I can code. </p>
+        
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        
+		<div class="row">
+			<div class="twelve columns">
+				<div class="article">
+                                  <h1 class="title">Manipulate semantic tree of R language</h1>
+                                  <div class="post-date">2014-11-09</div>
+                                  <div class="share-button">
+                                  <a href="https://twitter.com/share" class="twitter-share-button" data-text = "Manipulate semantic tree of R language">Tweet</a>
+                                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                  </div>
+                                  
+					<p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
+<p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as is</p>
+<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s &lt;- s + x})
+quote_for</code></pre>
+<pre><code>## for (x in 1:3) {
+##     s &lt;- s + x
+## }</code></pre>
+<p>It works on semantic level, so the input must be a valid R expression,</p>
+<pre class="r"><code>## This will lead to an error
+## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre>
+<p>The returned result is a R language object, composed of calls and symbols. We can get elements from the semantic tree,</p>
+<pre class="r"><code>quote_for[[1]]; quote_for[[2]]; quote_for[[3]]; quote_for[[4]];</code></pre>
+<pre><code>## `for`</code></pre>
+<pre><code>## x</code></pre>
+<pre><code>## 1:3</code></pre>
+<pre><code>## {
+##     s &lt;- s + x
+## }</code></pre>
+<p>and even set elements,</p>
+<pre class="r"><code>quote_for[[3]] &lt;- quote(1:10)
+quote_for</code></pre>
+<pre><code>## for (x in 1:10) {
+##     s &lt;- s + x
+## }</code></pre>
+<pre class="r"><code>s  &lt;- 0
+eval(quote_for)
+s</code></pre>
+<pre><code>## [1] 55</code></pre>
+<p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its behavior is unnecessarily complex, - If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute - If the argument <code>env</code> is not <code>.GlobalEnv</code> - If the argument <code>expr</code> is a promise object, get the expression slot of the promise without any substitute. The is typically used to capture unevaluated expression from caller function. - If the argument <code>expr</code> is not a promise object, substitute the unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></p>
+<p>This is a very bad design, that a function might do totally different things depending on the running environment. Such a complex design makes it hard to guess its behavior.</p>
+<p>Following suggestions in book <em>Advanced R</em>, we define a few helper functions, each of which does only one job clearly. Note the name of functions are different from Advanced R. The suffix <code>*_s</code> means standard evaluation, so it’s the caller’s responsibility to quote code explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
+<pre class="r"><code>## The definition here may be hard to follow. Please focus on the
+## usage explained below, instead of the ugly implementation. If you
+## are curiouse about the implementation, please read Advaned R.
+substitute_q &lt;- function(expr, env = emptyenv()) {
+  expr &lt;- substitute(expr)
+  if (identical(env, globalenv())) {
+    env &lt;- as.list(env)
+  }
+  eval(substitute(substitute(expr, env), list(expr = expr)))
+}
+
+substitute_s &lt;- function(expr, env = emptyenv()) {
+  call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
+  eval(call)
+}</code></pre>
+<p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For example,</p>
+<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s  &lt;- s + x})
+substitute_s(quote_for, list(x = quote(y)))</code></pre>
+<pre><code>## for (y in 1:3) {
+##     s &lt;- s + y
+## }</code></pre>
+<p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code> automatically, so the caller doesn’t need to quote the code and must pass the argument <code>expr</code> lexically. It seems to be convenient, but may cause some issue since we cannot pass the quoted code saved in a variable to <code>substitute_q</code>.</p>
+<pre class="r"><code>substitute_q(for(x in 1:3){ s  &lt;- s + x}, list(x = quote(y)))</code></pre>
+<pre><code>## for (y in 1:3) {
+##     s &lt;- s + y
+## }</code></pre>
+<p><code>bquote</code> is similar but provides better control. It return unevaluated semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
+<pre class="r"><code>## The result is not meaningful. Why do I do that? Because I can.
+bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
+<pre><code>## for (x in 1:3) {
+##     s &lt;- s + y
+## }</code></pre>
+<p>Both <code>substitute_*</code> and <code>bquote</code> work on lexical basis, so there is no guarantee that the result is semantically correct or meaningful. Nonetheless, it is much easier and safer to manipulate R code with those functions than manipulate R code as strings.</p>
+
+
+                                        <!--  disqus  -->
+                                        <div id="disqus_thread"></div>
+                                        <script type="text/javascript">
+                                          /* * * CONFIGURATION VARIABLES * * */
+                                          var disqus_shortname = 'luckyrandom-blog';
+                                          var disqus_identifier = '/blog/articles/00040-Manipulate-semantic-tree-of-R-language/';
+                                          /* * * DON'T EDIT BELOW THIS LINE * * */
+                                          (function() {
+                                          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                          })();
+                                        </script>
+                                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+				</div>
+			</div>
+		</div>
+
+                
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        
+        <section class="about">
+          
+
+        </section>
+        <section class="copy">
+          <p> &copy; 2014 Chenliang Xu &mdash; powerd by &nbsp;
+            <a href='https://github.com/jnordberg/wintersmith'> Wintersmith </a>
+          </p>
+        </section>
+        
+      </div>
+    </footer>
+  </body>
+</html>

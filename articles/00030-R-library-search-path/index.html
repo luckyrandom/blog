@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js fonts-loading" lang="en">
+  <!--<![endif]-->
+  <head>
+    
+		
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+		
+		
+		<meta property="og:image" content="http://localhost:8080">
+		
+		<meta property="og:title" content="R library search path">
+		<meta property="og:url" content="http://localhost:8080/blog/articles/00030-R-library-search-path/">
+		<meta property="og:site_name" content="">
+		<meta property="og:type" content="blog">
+		<meta property="og:description" content="">
+
+    <link rel="canonical" href="http://localhost:8080/blog/articles/00030-R-library-search-path/"/>
+    <title>R library search path - Chenliang Xu</title>
+    <link rel="stylesheet" href="/blog/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/blog/highlight/styles/tomorrow.css">
+    <script src="/blog/highlight/highlight.pack.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="/blog/javascript/highlight-pandoc.js"></script>
+    
+  </head>
+  <body>
+    <header class="header">
+      <div class="content-wrap">
+        
+        <div class="logo">
+          <h1>
+            <a href=/blog/>
+              The Luckyrandom's blog
+            </a>
+        </div>
+        <p class="description"> I enjoy thinking; I know statistics; I can code. </p>
+        
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        
+		<div class="row">
+			<div class="twelve columns">
+				<div class="article">
+                                  <h1 class="title">R library search path</h1>
+                                  <div class="post-date">2014-07-22</div>
+                                  <div class="share-button">
+                                  <a href="https://twitter.com/share" class="twitter-share-button" data-text = "R library search path">Tweet</a>
+                                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                  </div>
+                                  
+					<p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different directory,</p>
+<ul>
+<li>‘.Library’ is a character string giving the location of the defualt library, with default value <code>$R_HOME/library</code></li>
+<li>‘.Library.site’ is a character string vector giving the location of the site libraries, with defualt value <code>$R_HOME/site-library</code></li>
+<li>User library paths. There is no variable corresponding to it, but it can be get and set with function ‘.libPaths()’</li>
+</ul>
+<p>R startup with the following steps,</p>
+<ul>
+<li>Set environment variables unless ’–no-environ was given on the command line</li>
+<li>Load site environment variables from <code>$R_ENVIRON</code> or <code>$R_HOME/etc/Renviron.site</code></li>
+<li>Load user environment variables from <code>.Renviron</code> in the current or home directory</li>
+<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are loaded.</li>
+<li>Load site profile file from <code>$R_PROFILE</code> OR <code>$R_HOME/etc/Rprofile.site</code></li>
+<li>Load user profile <code>.Rprofile</code> from the current or home directory</li>
+<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by ‘options(“defaultPackages”)’.</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/.libPaths.html">help(“.libPaths”)</a></li>
+</ul>
+
+
+                                        <!--  disqus  -->
+                                        <div id="disqus_thread"></div>
+                                        <script type="text/javascript">
+                                          /* * * CONFIGURATION VARIABLES * * */
+                                          var disqus_shortname = 'luckyrandom-blog';
+                                          var disqus_identifier = '/blog/articles/00030-R-library-search-path/';
+                                          /* * * DON'T EDIT BELOW THIS LINE * * */
+                                          (function() {
+                                          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                          })();
+                                        </script>
+                                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+				</div>
+			</div>
+		</div>
+
+                
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        
+        <section class="about">
+          
+
+        </section>
+        <section class="copy">
+          <p> &copy; 2014 Chenliang Xu &mdash; powerd by &nbsp;
+            <a href='https://github.com/jnordberg/wintersmith'> Wintersmith </a>
+          </p>
+        </section>
+        
+      </div>
+    </footer>
+  </body>
+</html>

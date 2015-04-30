@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js fonts-loading" lang="en">
+  <!--<![endif]-->
+  <head>
+    
+		
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+		
+		
+		<meta property="og:image" content="http://localhost:8080">
+		
+		<meta property="og:title" content="R startup mechanism">
+		<meta property="og:url" content="http://localhost:8080/blog/articles/00020-R-startup-mechanism/">
+		<meta property="og:site_name" content="">
+		<meta property="og:type" content="blog">
+		<meta property="og:description" content="">
+
+    <link rel="canonical" href="http://localhost:8080/blog/articles/00020-R-startup-mechanism/"/>
+    <title>R startup mechanism - Chenliang Xu</title>
+    <link rel="stylesheet" href="/blog/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/blog/highlight/styles/tomorrow.css">
+    <script src="/blog/highlight/highlight.pack.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="/blog/javascript/highlight-pandoc.js"></script>
+    
+  </head>
+  <body>
+    <header class="header">
+      <div class="content-wrap">
+        
+        <div class="logo">
+          <h1>
+            <a href=/blog/>
+              The Luckyrandom's blog
+            </a>
+        </div>
+        <p class="description"> I enjoy thinking; I know statistics; I can code. </p>
+        
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        
+		<div class="row">
+			<div class="twelve columns">
+				<div class="article">
+                                  <h1 class="title">R startup mechanism</h1>
+                                  <div class="post-date">2014-07-19</div>
+                                  <div class="share-button">
+                                  <a href="https://twitter.com/share" class="twitter-share-button" data-text = "R startup mechanism">Tweet</a>
+                                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                  </div>
+                                  
+					<p>R startup with the following steps,</p>
+<ul>
+<li>Set environment variables unless ’–no-environ was given on the command line</li>
+<li>Load site environment variables from <code>$R\_HOME/etc/Renviron</code></li>
+<li>Load site environment variables from <code>$R\_ENVIRON</code> or <code>$R\_HOME/etc/Renviron.site</code></li>
+<li>Load user environment variables from <code>.Renviron</code> in the current or home directory</li>
+<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are loaded.</li>
+<li>Load site profile file from <code>$R\_PROFILE</code> OR <code>$R\_HOME/etc/Rprofile.site</code></li>
+<li>Load user profile <code>.Rprofile</code> from the current or home directory</li>
+<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by ‘options(<code>defaultPackages</code>)’.</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">help(“Startup”)</a></li>
+</ul>
+
+
+                                        <!--  disqus  -->
+                                        <div id="disqus_thread"></div>
+                                        <script type="text/javascript">
+                                          /* * * CONFIGURATION VARIABLES * * */
+                                          var disqus_shortname = 'luckyrandom-blog';
+                                          var disqus_identifier = '/blog/articles/00020-R-startup-mechanism/';
+                                          /* * * DON'T EDIT BELOW THIS LINE * * */
+                                          (function() {
+                                          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                          })();
+                                        </script>
+                                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+				</div>
+			</div>
+		</div>
+
+                
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        
+        <section class="about">
+          
+
+        </section>
+        <section class="copy">
+          <p> &copy; 2014 Chenliang Xu &mdash; powerd by &nbsp;
+            <a href='https://github.com/jnordberg/wintersmith'> Wintersmith </a>
+          </p>
+        </section>
+        
+      </div>
+    </footer>
+  </body>
+</html>

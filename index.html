@@ -12,6 +12,10 @@
     <link rel="canonical" href=""/>
     <title> - Chenliang Xu</title>
     <link rel="stylesheet" href="/blog/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/blog/highlight/styles/tomorrow.css">
+    <script src="/blog/highlight/highlight.pack.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="/blog/javascript/highlight-pandoc.js"></script>
     
   </head>
   <body>
@@ -24,7 +28,7 @@
               The Luckyrandom's blog
             </a>
         </div>
-        <p class="description"> Some notes for myself </p>
+        <p class="description"> I enjoy thinking; I know statistics; I can code. </p>
         
     </header>
     <div id="content">
@@ -35,122 +39,141 @@
   <header>
     <p class="date">
       <span>
+         29. April 2015
+      </span>
+    </p>
+    <h2>
+      <a href="/blog/articles/00050-311-service/"> Big data analytics with dplyr and SQLite </a>
+    </h2>
+  </header>
+  <section class="content">
+    <style type="text/css">
+div.code_chunk {
+border-left: rgb(123, 218, 123);
+border-left-width: thick;
+border-left-style: solid;
+}
+
+pre.time {
+display: block;b
+padding-right: 1ex;
+Background-color: rgb(123, 218, 123);
+padding: 0.2em;
+margin-left: 0em;
+margin-bottom: 0em;
+border: none;
+border-radius: initial;
+color: rgba(255, 255, 255, 0.75);
+font-size: 0.6em;
+}
+</style>
+
+<p><strong>The rmd source file is available on <a href="https://github.com/luckyrandom/blog/tree/source/contents/articles/00050-311-service/311service.Rmd">github</a>.</strong></p>
+<p>The article <a href="https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas">Big data analytics with Pandas and SQLite</a> on <a href="https://plot.ly/">plot.ly</a> demonstrates a large data workflow with Pandas, Python and SQLite. As suggested by <a href="https://twitter.com/hadleywickham">Hadley Wickham</a> on <a href="https://twitter.com/hadleywickham/status/586946466570047488">twitter</a>, this post reimplements it in R for comparison. It may not be a fair comparison, since reimplement is easier than original analysis. This post owes a debt of gratitude to the <a href="https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas">original post</a> for its great&nbsp;analysis.</p>
+<p>The data file is composed of about 9.1 million rows of data (a diiferent size from the post on plot.ly, since the size increases everyday), containing <span class="caps">NYC</span>’s 311 complaints since 2003. The data file is too large to track in git, and can be download from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9"><span class="caps">NYC</span>’s open data portal</a>.</p>
+<p>The original article performs out-of-memory aggregations with SQLite, since the dataset is too large to load into a Pandas dataframe. However, the few columns we are interested in can be loaded in memory easily. This post compares three different implementation in&nbsp;R</p>
+<ul>
+<li>dplyr wrap of in memory&nbsp;data.frame</li>
+<li>dplyr wrap of SQLite&nbsp;database</li>
+<li><span class="caps">SQL</span> command with SQLite&nbsp;database</li>
+</ul>
+<p>Functions from <code>dplyr</code> and pipe function <code>%&gt;%</code> are heavily used in this post. Listed below are a few references about&nbsp;them.</p>
+<ul>
+<li><a href="http://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">Vignette about <code>%&gt;%</code> and <code>%T&gt;%</code></a></li>
+<li><a href="http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">Introduction to&nbsp;dplyr</a></li>
+<li><a href="http://cran.rstudio.com/web/packages/dplyr/vignettes/new-sql-backend.html">Introduction to dplyr <span class="caps">SQL</span>&nbsp;backend</a></li>
+</ul>
+<p>The code of the first half of post is direct translation of the Python code from the original post, and the <span class="caps">SQL</span> code is mostly copied from original post. The second half, starting from section about plot, is more or less different from the original post for two&nbsp;reasons.</p>
+<p>Firstly, the original post use interactive plot heavily by <a href="https://plot.ly/">plot.ly</a>, but it’s not easy to draw active plot in R (which indeed means I’m not good at it in&nbsp;R).</p>
+<p>Secondly and more importantly, I hold a different opinion about some of the plots. Although the interactive plots are cool, the information included is too dense to be useful. You can hover mouse on the plot to get detail information, but you don’t know where to hover when the plot include more than hundreds of columns or rows of data. Instead, the plots in this posts focus on top values. Also, some of the bar charts are replaced by dots plots and heat plots when they are more&nbsp;informative.</p>
+<p>This post is written in <code>rmarkdown</code> and rendered by <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://pandoc.org/">pandoc</a>, or can be rendered by <a href="http://rmarkdown.rstudio.com/">R Markdown v2</a>, if you prefer. The <span class="caps">CPU</span> time is measured with some special hook of knitr, and reported both as number and color of header of each chunk, with red representing long run time. Please check the source code if you are interested in the&nbsp;implementation.</p>
+
+    <p class="more">
+      <a href="/blog/articles/00050-311-service/">more</a>
+    </p>
+  </section>
+     
+</article>
+
+<article class="article intro">
+  <header>
+    <p class="date">
+      <span>
          10. November 2014
       </span>
     </p>
     <h2>
-      <a href="/blog/articles/20141106-Manipulate-semantic-tree-of-R-language/"> Manipulate semantic tree of R language </a>
+      <a href="/blog/articles/00040-Manipulate-semantic-tree-of-R-language/"> Manipulate semantic tree of R language </a>
     </h2>
   </header>
   <section class="content">
-    <p><em>This is basically a reading note on chapter
-<a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
-<p>R provides a few functions that expose and manipulate the semantic
-tree of R language. The simplest one is <code>quote</code>, which return the
-semantic tree as&nbsp;is</p>
-<pre><code class="lang-r">quote_for &lt;- quote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s &lt;- s + x})
-quote_for
-</code></pre>
+    <p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
+<p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as&nbsp;is</p>
+<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s &lt;- s + x})
+quote_for</code></pre>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + x
-## }
-</code></pre><p>It works on semantic level,
-so the input must be a valid R&nbsp;expression,</p>
-<pre><code class="lang-r"><span class="comment">## This will lead to an error</span>
-<span class="comment">## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</span>
-</code></pre>
-<p>The returned result is a R language object, composed of calls and
-symbols. We can get elements from the semantic&nbsp;tree,</p>
-<pre><code class="lang-r">quote_for[[<span class="number">1</span>]]; quote_for[[<span class="number">2</span>]]; quote_for[[<span class="number">3</span>]]; quote_for[[<span class="number">4</span>]];
-</code></pre>
-<pre><code>## `for`
-</code></pre><pre><code>## x
-</code></pre><pre><code>## 1:3
-</code></pre><pre><code>## {
+## }</code></pre>
+<p>It works on semantic level, so the input must be a valid R&nbsp;expression,</p>
+<pre class="r"><code>## This will lead to an error
+## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre>
+<p>The returned result is a R language object, composed of calls and symbols. We can get elements from the semantic&nbsp;tree,</p>
+<pre class="r"><code>quote_for[[1]]; quote_for[[2]]; quote_for[[3]]; quote_for[[4]];</code></pre>
+<pre><code>## `for`</code></pre>
+<pre><code>## x</code></pre>
+<pre><code>## 1:3</code></pre>
+<pre><code>## {
 ##     s &lt;- s + x
-## }
-</code></pre><p>and even set&nbsp;elements,</p>
-<pre><code class="lang-r">quote_for[[<span class="number">3</span>]] &lt;- quote(<span class="number">1</span>:<span class="number">10</span>)
-quote_for
-</code></pre>
+## }</code></pre>
+<p>and even set&nbsp;elements,</p>
+<pre class="r"><code>quote_for[[3]] &lt;- quote(1:10)
+quote_for</code></pre>
 <pre><code>## for (x in 1:10) {
 ##     s &lt;- s + x
-## }
-</code></pre><pre><code class="lang-r">s  &lt;- <span class="number">0</span>
+## }</code></pre>
+<pre class="r"><code>s  &lt;- 0
 eval(quote_for)
-s
-</code></pre>
-<pre><code>## [1] 55
-</code></pre><p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its
-behavior is unnecessarily&nbsp;complex,</p>
-<ul>
-<li>If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any&nbsp;substitute</li>
-<li>If the argument <code>env</code> is not <code>.GlobalEnv</code><ul>
-<li>If the argument <code>expr</code> is a promise object, get the expression slot
-of the promise without any substitute. The is typically used to
-capture unevaluated expression from caller&nbsp;function.</li>
-<li>If the argument <code>expr</code> is not a promise object, substitute the
-unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></li>
-</ul>
-</li>
-</ul>
-<p>This is a very bad design, that a function might do totally different
-things depending on the running environment. Such a complex design
-makes it hard to guess its&nbsp;behavior.</p>
-<p>Following suggestions in book <em>Advanced R</em>, we define a few helper
-functions, each of which does only one job clearly. Note the name of
-functions are different from Advanced R. The suffix <code>*_s</code> means
-standard evaluation, so it’s the caller’s responsibility to quote code
-explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp
-users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
-<pre><code class="lang-r"><span class="comment">## The definition here may be hard to follow. Please focus on the</span>
-<span class="comment">## usage explained below, instead of the ugly implementation. If you</span>
-<span class="comment">## are curiouse about the implementation, please read Advaned R.</span>
-substitute_q &lt;- <span class="keyword">function</span>(expr, env = emptyenv()) {
+s</code></pre>
+<pre><code>## [1] 55</code></pre>
+<p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its behavior is unnecessarily complex, - If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute - If the argument <code>env</code> is not <code>.GlobalEnv</code> - If the argument <code>expr</code> is a promise object, get the expression slot of the promise without any substitute. The is typically used to capture unevaluated expression from caller function. - If the argument <code>expr</code> is not a promise object, substitute the unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></p>
+<p>This is a very bad design, that a function might do totally different things depending on the running environment. Such a complex design makes it hard to guess its&nbsp;behavior.</p>
+<p>Following suggestions in book <em>Advanced R</em>, we define a few helper functions, each of which does only one job clearly. Note the name of functions are different from Advanced R. The suffix <code>*_s</code> means standard evaluation, so it’s the caller’s responsibility to quote code explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
+<pre class="r"><code>## The definition here may be hard to follow. Please focus on the
+## usage explained below, instead of the ugly implementation. If you
+## are curiouse about the implementation, please read Advaned R.
+substitute_q &lt;- function(expr, env = emptyenv()) {
   expr &lt;- substitute(expr)
-  <span class="keyword">if</span> (identical(env, globalenv())) {
+  if (identical(env, globalenv())) {
     env &lt;- as.list(env)
   }
   eval(substitute(substitute(expr, env), list(expr = expr)))
 }
 
-substitute_s &lt;- <span class="keyword">function</span>(expr, env = emptyenv()) {
+substitute_s &lt;- function(expr, env = emptyenv()) {
   call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
   eval(call)
-}
-</code></pre>
+}</code></pre>
 <p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For&nbsp;example,</p>
-<pre><code class="lang-r">quote_for &lt;- quote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + x})
-substitute_s(quote_for, list(x = quote(y)))
-</code></pre>
+<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s  &lt;- s + x})
+substitute_s(quote_for, list(x = quote(y)))</code></pre>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
-## }
-</code></pre><p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code>
-automatically, so the caller doesn’t need to quote the code and must
-pass the argument <code>expr</code> lexically. It seems to be convenient, but may
-cause some issue since we cannot pass the quoted code saved in a
-variable to <code>substitute_q</code>.</p>
-<pre><code class="lang-r">substitute_q(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + x}, list(x = quote(y)))
-</code></pre>
+## }</code></pre>
+<p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code> automatically, so the caller doesn’t need to quote the code and must pass the argument <code>expr</code> lexically. It seems to be convenient, but may cause some issue since we cannot pass the quoted code saved in a variable to <code>substitute_q</code>.</p>
+<pre class="r"><code>substitute_q(for(x in 1:3){ s  &lt;- s + x}, list(x = quote(y)))</code></pre>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
-## }
-</code></pre><p><code>bquote</code> is similar but provides better control. It return unevaluated
-semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
-<pre><code class="lang-r"><span class="comment">## The result is not meaningful. Why do I do that? Because I can.</span>
-bquote(<span class="keyword">for</span>(x <span class="keyword">in</span> <span class="number">1</span>:<span class="number">3</span>){ s  &lt;- s + .(x)}, list(x = quote(y)))
-</code></pre>
+## }</code></pre>
+<p><code>bquote</code> is similar but provides better control. It return unevaluated semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
+<pre class="r"><code>## The result is not meaningful. Why do I do that? Because I can.
+bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + y
-## }
-</code></pre><p>Both <code>substitute_*</code> and <code>bquote</code> work on lexical basis, so there is no
-guarantee that the result is semantically correct or
-meaningful. Nonetheless, it is much easier and safer to manipulate R
-code with those functions than manipulate R code as&nbsp;strings.</p>
+## }</code></pre>
+<p>Both <code>substitute_*</code> and <code>bquote</code> work on lexical basis, so there is no guarantee that the result is semantically correct or meaningful. Nonetheless, it is much easier and safer to manipulate R code with those functions than manipulate R code as&nbsp;strings.</p>
 
     <p class="more">
-      <a href="/blog/articles/20141106-Manipulate-semantic-tree-of-R-language/">more</a>
+      <a href="/blog/articles/00040-Manipulate-semantic-tree-of-R-language/">more</a>
     </p>
   </section>
      
@@ -164,37 +187,27 @@ code with those functions than manipulate R code as&nbsp;strings.</p>
       </span>
     </p>
     <h2>
-      <a href="/blog/articles/20140722-R-library-search-path/"> R library search path </a>
+      <a href="/blog/articles/00030-R-library-search-path/"> R library search path </a>
     </h2>
   </header>
   <section class="content">
-    <p>When ‘library()’ or ‘require()’ is called, R load packages from
-library search paths, which consists of three different&nbsp;directory,</p>
+    <p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different&nbsp;directory,</p>
 <ul>
-<li>‘.Library’ is a character string giving the location of the defualt
-library, with default value&nbsp;“$R_HOME/library”</li>
-<li>‘.Library.site’ is a character string vector giving the location of
-the site libraries, with defualt value&nbsp;“$R_HOME/site-library”</li>
-<li>User library paths. There is no variable corresponding to it, but it
-can be get and set with function&nbsp;‘.libPaths()’</li>
+<li>‘.Library’ is a character string giving the location of the defualt library, with default value <code>$R_HOME/library</code></li>
+<li>‘.Library.site’ is a character string vector giving the location of the site libraries, with defualt value <code>$R_HOME/site-library</code></li>
+<li>User library paths. There is no variable corresponding to it, but it can be get and set with function&nbsp;‘.libPaths()’</li>
 </ul>
 <p>R startup with the following&nbsp;steps,</p>
 <ul>
-<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
-<li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
-<li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
-</ul>
-</li>
-<li>Load startup profile files, containing R code. Only the ‘base’
-package is loaded, when the profiles are loaded.<ul>
-<li>Load site profile file from “$R_PROFILE” <span class="caps">OR</span>&nbsp;“$R_HOME/etc/Rprofile.site”</li>
-<li>Load user profile “.Rprofile” from the current or home&nbsp;directory</li>
-</ul>
-</li>
-<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command&nbsp;line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from&nbsp;“.RData”.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
-all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
+<li>Set environment variables unless ’–no-environ was given on the command&nbsp;line</li>
+<li>Load site environment variables from <code>$R_ENVIRON</code> or <code>$R_HOME/etc/Renviron.site</code></li>
+<li>Load user environment variables from <code>.Renviron</code> in the current or home&nbsp;directory</li>
+<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are&nbsp;loaded.</li>
+<li>Load site profile file from <code>$R_PROFILE</code> <span class="caps">OR</span> <code>$R_HOME/etc/Rprofile.site</code></li>
+<li>Load user profile <code>.Rprofile</code> from the current or home&nbsp;directory</li>
+<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command&nbsp;line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
 </ul>
 <h1 id="reference">Reference</h1>
 <ul>
@@ -202,7 +215,7 @@ all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
 </ul>
 
     <p class="more">
-      <a href="/blog/articles/20140722-R-library-search-path/">more</a>
+      <a href="/blog/articles/00030-R-library-search-path/">more</a>
     </p>
   </section>
      
@@ -216,28 +229,22 @@ all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
       </span>
     </p>
     <h2>
-      <a href="/blog/articles/20140719-R-startup-mechanism/"> R startup mechanism </a>
+      <a href="/blog/articles/00020-R-startup-mechanism/"> R startup mechanism </a>
     </h2>
   </header>
   <section class="content">
     <p>R startup with the following&nbsp;steps,</p>
 <ul>
-<li>Set environment variables unless ‘—no-environ was given on the command line<ul>
-<li>Load site environment variables from&nbsp;“$R_HOME/etc/Renviron”</li>
-<li>Load site environment variables from “$R_ENVIRON” or&nbsp;“$R_HOME/etc/Renviron.site”</li>
-<li>Load user environment variables from “.Renviron” in the current or home&nbsp;directory </li>
-</ul>
-</li>
-<li>Load startup profile files, containing R code. Only the ‘base’
-package is loaded, when the profiles are loaded.<ul>
-<li>Load site profile file from “$R_PROFILE” <span class="caps">OR</span>&nbsp;“$R_HOME/etc/Rprofile.site”</li>
-<li>Load user profile “.Rprofile” from the current or home&nbsp;directory</li>
-</ul>
-</li>
-<li>Load “.RData” unless ‘—no-restore’ or similar arguments was given on the command&nbsp;line</li>
-<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from&nbsp;“.RData”.</li>
-<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load
-all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
+<li>Set environment variables unless ’–no-environ was given on the command&nbsp;line</li>
+<li>Load site environment variables from <code>$R\_HOME/etc/Renviron</code></li>
+<li>Load site environment variables from <code>$R\_ENVIRON</code> or <code>$R\_HOME/etc/Renviron.site</code></li>
+<li>Load user environment variables from <code>.Renviron</code> in the current or home&nbsp;directory</li>
+<li>Load startup profile files, containing R code. Only the ‘base’ package is loaded, when the profiles are&nbsp;loaded.</li>
+<li>Load site profile file from <code>$R\_PROFILE</code> <span class="caps">OR</span> <code>$R\_HOME/etc/Rprofile.site</code></li>
+<li>Load user profile <code>.Rprofile</code> from the current or home&nbsp;directory</li>
+<li>Load <code>.RData</code> unless ‘–no-restore’ or similar arguments was given on the command&nbsp;line</li>
+<li>Call function ‘.First()’ if it exists. It can be defined in profile files or loaded from <code>.RData</code>.</li>
+<li>Call function ‘.First.sys()’ provided by ‘base’ package, which load all the packages specified by ‘options(<code>defaultPackages</code>)’.</li>
 </ul>
 <h1 id="reference">Reference</h1>
 <ul>
@@ -245,7 +252,7 @@ all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
 </ul>
 
     <p class="more">
-      <a href="/blog/articles/20140719-R-startup-mechanism/">more</a>
+      <a href="/blog/articles/00020-R-startup-mechanism/">more</a>
     </p>
   </section>
      
@@ -259,15 +266,14 @@ all the packages specified by&nbsp;‘options(“defaultPackages”)’.</li>
       </span>
     </p>
     <h2>
-      <a href="/blog/articles/some-test/"> Code and stuff! </a>
+      <a href="/blog/articles/00010-some-test/"> Code and stuff! </a>
     </h2>
   </header>
   <section class="content">
-    <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.
-The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
+    <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>. The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
 <p>
     <p class="more">
-      <a href="/blog/articles/some-test/">more</a>
+      <a href="/blog/articles/00010-some-test/">more</a>
     </p>
   </section>
      
@@ -288,6 +294,7 @@ The theme used is tomorrow, you can find more themes <a href="http://jmblog.gith
 
         <section class="about">
           
+
         </section>
         <section class="copy">
           <p> &copy; 2014 Chenliang Xu &mdash; powerd by &nbsp;
