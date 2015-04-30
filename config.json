@@ -39,7 +39,7 @@
     "**/.gitignore",
     "s3RoutingRules.xml",
     "articles/*/cache/**",
-    "**/311_Service_Requests_from_2010_to_Present.csv",
+    "articles/*/noshare/**",
     "**/.#**"
   ],
   "baseUrl": "/blog/"
