@@ -25,9 +25,22 @@ color: rgba(255, 255, 255, 0.75);
 font-size: 0.6em;
 }
 </style>
-
 **The rmd source file is available on
 [github](https://github.com/luckyrandom/blog/tree/source/contents/articles/00050-311-service/311service.Rmd).**
+
+#Summary
+
+This is a long post. I put my thought about this project in the
+beginning, so you can skip all the details.
+
+- In memory implementation is in general faster than database. If your
+data is not that big, try in memory implementation.
+- The dplyr wrap makes it easy to switch from one implementation to
+another, though it is not effortless.
+- Be careful with unusual values. "00:00:00" may mean NA.
+- Choose an appropriate plot.
+
+#Introduction
 
 The article
 [Big data analytics with Pandas and SQLite](https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas)
