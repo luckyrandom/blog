@@ -39,7 +39,7 @@ data is not that big, try in memory implementation.
 - The dplyr wrap makes it easy to switch from one implementation to
 another, though it is not effortless.
 - Be careful with unusual values. "00:00:00" may mean NA.
-- Choose an appropriate plot.
+- Choose an informative plot.
 
 #Introduction
 
