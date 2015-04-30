@@ -33,8 +33,16 @@ color: rgba(255, 255, 255, 0.75);
 font-size: 0.6em;
 }
 </style>
-
 <p><strong>The rmd source file is available on <a href="https://github.com/luckyrandom/blog/tree/source/contents/articles/00050-311-service/311service.Rmd">github</a>.</strong></p>
+<h1 id="summary">Summary</h1>
+<p>This is a long post. I put my thought about this project in the beginning, so you can skip all the details.</p>
+<ul>
+<li>In memory implementation is in general faster than database. If your data is not that big, try in memory implementation.</li>
+<li>The dplyr wrap makes it easy to switch from one implementation to another, though it is not effortless.</li>
+<li>Be careful with unusual values. “00:00:00” may mean NA.</li>
+<li>Choose an appropriate plot.</li>
+</ul>
+<h1 id="introduction">Introduction</h1>
 <p>The article <a href="https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas">Big data analytics with Pandas and SQLite</a> on <a href="https://plot.ly/">plot.ly</a> demonstrates a large data workflow with Pandas, Python and SQLite. As suggested by <a href="https://twitter.com/hadleywickham">Hadley Wickham</a> on <a href="https://twitter.com/hadleywickham/status/586946466570047488">twitter</a>, this post reimplements it in R for comparison. It may not be a fair comparison, since reimplement is easier than original analysis. This post owes a debt of gratitude to the <a href="https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas">original post</a> for its great analysis.</p>
 <p>The data file is composed of about 9.1 million rows of data (a diiferent size from the post on plot.ly, since the size increases everyday), containing NYC’s 311 complaints since 2003. The data file is too large to track in git, and can be download from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9">NYC’s open data portal</a>.</p>
 <p>The original article performs out-of-memory aggregations with SQLite, since the dataset is too large to load into a Pandas dataframe. However, the few columns we are interested in can be loaded in memory easily. This post compares three different implementation in R</p>
