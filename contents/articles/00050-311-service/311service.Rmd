@@ -1,0 +1,827 @@
+---
+title: "Big data analytics with dplyr and SQLite"
+subtitle: "Reimplement analytics of NYC 311 service data in R"
+author: Chenliang Xu
+date: 2015-04-29 18:00
+template: post.html
+---
+<style type="text/css">
+div.code_chunk {
+border-left: rgb(123, 218, 123);
+border-left-width: thick;
+border-left-style: solid;
+}
+
+pre.time {
+display: block;b
+padding-right: 1ex;
+Background-color: rgb(123, 218, 123);
+padding: 0.2em;
+margin-left: 0em;
+margin-bottom: 0em;
+border: none;
+border-radius: initial;
+color: rgba(255, 255, 255, 0.75);
+font-size: 0.6em;
+}
+</style>
+
+**The rmd source file is available on
+[github](https://github.com/luckyrandom/blog/tree/source/contents/articles/00050-311-service/311service.Rmd).**
+
+The article
+[Big data analytics with Pandas and SQLite](https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas)
+on [plot.ly](https://plot.ly/) demonstrates a large data workflow with
+Pandas, Python and SQLite. As suggested by
+[Hadley Wickham](https://twitter.com/hadleywickham) on
+[twitter](https://twitter.com/hadleywickham/status/586946466570047488),
+this post reimplements it in R for comparison. It may not be a fair
+comparison, since reimplement is easier than original
+analysis. This post owes a debt of gratitude to the
+[original post](https://plot.ly/ipython-notebooks/big-data-analytics-with-pandas-and-sqlite/#A-Large-Data-Workflow-with-Pandas)
+for its great analysis.
+
+The data file is composed of about 9.1 million rows of data (a
+diiferent size from the post on plot.ly, since the size increases
+everyday), containing NYC's 311 complaints since 2003. The data file
+is too large to track in git, and can be download from
+[NYC's open data portal](https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9).
+
+The original article performs out-of-memory aggregations with SQLite,
+since the dataset is too large to load into a Pandas
+dataframe. However, the few columns we are interested in can be loaded
+in memory easily. This post compares three different implementation in
+R
+
+- dplyr wrap of in memory data.frame
+- dplyr wrap of SQLite database
+- SQL command with SQLite database
+
+Functions from `dplyr` and pipe function `%>%` are heavily used in
+this post. Listed below are a few references about them.
+
+- [Vignette about `%>%` and `%T>%`](http://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html)
+- [Introduction to dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
+- [Introduction to dplyr SQL backend](http://cran.rstudio.com/web/packages/dplyr/vignettes/new-sql-backend.html)
+
+The code of the first half of post is direct translation of the Python
+code from the original post, and the SQL code is mostly copied from
+original post. The second half, starting from section about plot, is
+more or less different from the original post for two
+reasons.
+
+Firstly, the original post use interactive plot heavily by
+[plot.ly](https://plot.ly/), but it's not easy to draw active plot in
+R (which indeed means I'm not good at it in R).
+
+Secondly and more importantly, I hold a different opinion about some
+of the plots. Although the interactive plots are cool, the information
+included is too dense to be useful. You can hover mouse on the plot to
+get detail information, but you don't know where to hover when the
+plot include more than hundreds of columns or rows of data. Instead,
+the plots in this posts focus on top values. Also, some of the bar
+charts are replaced by dots plots and heat plots when they are more
+informative.
+
+This post is written in `rmarkdown` and rendered by
+[knitr](http://yihui.name/knitr/) and [pandoc](http://pandoc.org/), or
+can be rendered by [R Markdown v2](http://rmarkdown.rstudio.com/), if
+you prefer. The CPU time is measured with some special hook of knitr,
+and reported both as number and color of header of each chunk, with
+red representing long run time. Please check the source code if you
+are interested in the implementation.
+
+```{r time_hook, cache = FALSE, echo = FALSE}
+library(knitr)
+## opts_chunk$set(cache = TRUE)
+opts_chunk$set(dpi = 300)
+opts_chunk$set(dev.args = list(bg = 'transparent'))
+chunk_old <- knit_hooks$get("chunk")
+hooks = {function() {
+             time_last <- NULL
+             time_diff <- NULL
+             label <- ""
+             time <- function(before, options, envir) {
+                 if (before) {
+                     time_last <<- proc.time()
+                 } else {
+                     time_diff <<- proc.time() - time_last
+                     label <<- options$label
+                 }
+                 NULL
+             }
+             chunk <-  function(x, options) {
+                 s <- summary(time_diff)
+                 if (label == options$label) {
+                     elapsed <- s[3]
+                     left <- c(123, 218, 123)
+                     red <- c(255, 0, 0)
+                     ratio <- (2 - min(elapsed, 2))/2
+                     right <- round(left * ratio + red * (1 - ratio))
+                     left_color <- sprintf("rgb(%s)", paste0(left, collapse = ", "))
+                     right_color <- sprintf("rgb(%s)", paste0(right, collapse = ", "))
+                     background_image <- 
+                         sprintf(
+                             "background-image: -webkit-linear-gradient(left, %s, %s); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
+  background-image:    -moz-linear-gradient(left, %s, %s); /* For Firefox (3.6 to 15) */
+  background-image:      -o-linear-gradient(left, %s, %s); /* For old Opera (11.1 to 12.0) */ 
+  background-image:         linear-gradient(to right, %s, %s); /* Standard syntax; must be last */",
+                             left_color, right_color, left_color, right_color,
+                             left_color, right_color, left_color, right_color)
+                     html_diff <- sprintf(
+                         '<pre class = time style="%s">%s</pre>',
+                         background_image,
+                         paste(names(s),
+                               format(s, digits = 3, scientific = FALSE),
+                               sep = ": ", collapse = " | "))
+                 } else {
+                     html_diff  <- ""
+                 }
+                 paste('<div class="code_chunk">',
+                       html_diff,
+                       chunk_old(x, options),
+                       '</div>', sep = "\n")
+             }
+             list(time = time, chunk = chunk)
+         }}() 
+knit_hooks$set(time = hooks$time, chunk = hooks$chunk)
+```
+
+## Load dataset
+```{r cache = FALSE}
+## load R packages
+library(readr)
+library(plyr)
+library(dplyr)
+library(scales)
+library(ggplot2)
+library(DBI)
+library(grid)
+theme_update(plot.background = element_blank(),
+             legend.background = element_blank())
+```
+
+Load a few lines to check the structure.
+
+```{r}
+## Data file is stored in sub-directory `noshare`
+file_311 <- file.path("noshare",
+                      "311_Service_Requests_from_2010_to_Present.csv")
+(head_service <- read_csv(file_311, n_max = 100))
+```
+
+Load the columns we are interested in. Thanks to `readr`, the loading is pretty fast.
+
+```{r time = TRUE}
+load_columns <- c('Agency', 'Created Date', 'Closed Date',
+                  'Complaint Type', 'Descriptor', 'City')
+col_types <- rep(list(col_skip()), length(colnames(head_service)))
+names(col_types) <- colnames(head_service)
+col_types[load_columns] <- rep(list(col_character()), 6) 
+```
+
+```{r load_data, time = TRUE}
+system.time(service_char <-
+    read_delim(file_311, delim = ",", col_types = col_types, progress = FALSE))
+```
+
+Change data types as needed.
+
+```{r change_data_type, time = TRUE}
+## rm white space in column names 
+colnames(service_char) <- sub(" ", "", colnames(service_char))
+time_format <- "%m/%d/%Y %I:%M:%S %p"
+service <- within(service_char, {
+                      Agency <- as.factor(Agency)
+                      CreatedDate  <-  strftime(as.POSIXlt(CreatedDate, format = time_format))
+                      ClosedDate <-  strftime(as.POSIXlt(ClosedDate, format = time_format))
+                      ComplaintType  <- as.factor(ComplaintType)
+                      City <- as.factor(City)
+                  })
+print(object.size(service), units = "Mb")
+rm(service_char)
+gc()
+```
+The size of object is about 1 Gb, which can be easily loaded in memory.
+
+Check the loaded data.
+
+```{r time = TRUE}
+service
+```
+
+Note that the dataset is printed neatly, without calling `head`
+function explicitly. The S3 class of `service` is `tbl_df`. According
+to the document, "The main advantage to using a 'tbl_df' over a
+regular data frame is the printing: tbl objects only print a few rows
+and all the columns that fit on one screen, describing the rest of it
+as text."
+
+Then we save the service table to SQLite database. If the data is
+larger, we may have to load and save by chunk, but I will cheat here
+by loading and saving the whole data, until
+[readr](https://github.com/hadley/readr) provides better support for
+[this feature](https://github.com/hadley/readr/issues/118).
+
+```{r create_db, cache = FALSE, time = TRUE}
+sql_file <- file.path("noshare", "service.sqlite")
+if( !file.exists( sql_file ) ||
+   file.mtime(file_311) > file.mtime( sql_file ) ) {
+    db <- dbConnect(RSQLite::SQLite(), sql_file)
+    ## Temperary fix for issue https://github.com/rstats-db/RSQLite/issues/82
+    setOldClass(c("tbl_df", "data.frame"))
+    dbWriteTable(db, "data", service, row.names = FALSE, overwrite = FALSE)
+} else {
+    db <- dbConnect(RSQLite::SQLite(), sql_file)
+}
+```
+
+Create dplyr wrap of SQLite database.
+
+```{r time = TRUE, cache = FALSE, time = TRUE}
+service_db <- tbl(src_sqlite(sql_file, create = FALSE), "data")
+```
+
+`service` is a dplyr wrap of in memory data.frame, and `service_db` is
+a dplyr wrap of the SQLite database. They share similar interfaces,
+and most functions that applied to one object can be applied to the
+other object without any change. `dplyr` translates the function calls
+applied to `service_db` to SQL command, which can be checked with
+function `explain`. The following function is defined to check the SQL
+command and then retrieve the value.
+
+```{r}
+explain_and_eval <- function(x, ...) {
+    print(explain(x, ...))
+    x
+}
+```
+
+# Preview the table
+
+```{r time = TRUE}
+dbGetQuery(db, 'SELECT * FROM data LIMIT 3')
+```
+
+```{r time = TRUE}
+print.data.frame(head(service, 3))
+```
+
+```{r time = TRUE}
+## A different way to check the structure of object
+str(service)
+```
+
+```{r time = TRUE}
+head(service, 3)
+```
+
+```{r time = TRUE}
+head(service_db, 3)
+```
+
+We don't have to call `head`, as I mentioned above.
+```{r time = TRUE}
+service
+```
+
+```{r time = TRUE}
+service_db
+```
+
+# Select just a couple of columns
+```{r time = TRUE}
+service[1:3, c("Agency", "Descriptor")]
+```
+
+```{r time = TRUE}
+service %>%
+  select(Agency, Descriptor) %>%
+  head(3)
+```
+
+```{r time = TRUE}
+service_db %>%
+  select(Agency, Descriptor) %>%
+  head(3)
+```
+
+```{r time = TRUE}
+dbGetQuery(db, 'SELECT Agency, Descriptor FROM data LIMIT 3')
+```
+
+# Filter rows by value
+```{r time = TRUE}
+service %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency == "NYPD")
+```
+
+```{r time = TRUE}
+service_db %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency == "NYPD")
+```
+
+We don't have to call `head`, but it runs faster here if we call `head`.
+
+```{r time = TRUE}
+service_db %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency == "NYPD")
+```
+
+
+```{r sql_filter_value,  time = TRUE}
+dbGetQuery(db,
+           'SELECT ComplaintType, Descriptor, Agency
+           FROM data
+           WHERE Agency = "NYPD"
+           LIMIT 10')           
+```
+
+# Filter rows by set of values
+```{r time = TRUE}
+subset(service, Agency %in% c("NYPD", "DOB"),
+       select = c("ComplaintType", "Descriptor", "Agency"))
+```
+
+```{r time = TRUE}
+service %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency %in% c("NYPD", "DOB"))
+```
+
+```{r time = TRUE}
+service %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency %in% c("NYPD", "DOB")) %>%
+  slice(1:10)
+```
+
+
+```{r sql_filter_set,  time = TRUE}
+service_db %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency %in% c("NYPD", "DOB"))
+```
+
+```{r sql_filter_set_head,  time = TRUE}
+service_db %>%
+  select(ComplaintType, Descriptor, Agency) %>%
+  filter(Agency %in% c("NYPD", "DOB")) %>% head(10)
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, 
+           'SELECT ComplaintType, Descriptor, Agency 
+            FROM data 
+            WHERE Agency IN ("NYPD", "DOB")
+            LIMIT 10')
+```
+
+# Find the unique values
+```{r  time = TRUE}
+head(unique(service$City))
+```
+
+Many of the values such "*", "00" seems represent missing values, but
+it takes too long to clean them. Let me pretend that I have never seen
+them.
+
+```{r  time = TRUE, echo = FALSE}
+## service %>%
+##   distinct(City)
+```
+
+```{r  time = TRUE}
+service_db %>%
+  summarize(distinct(City)) %>%
+  explain_and_eval
+```
+
+```{r  time = TRUE}
+distinct_city <- dbGetQuery(db, 'SELECT DISTINCT City FROM data')
+head(distinct_city)
+```
+
+# Query value counts
+
+```{r  time = TRUE}
+service %>%
+  count(Agency) %>%
+  rename(num_complaints = n)
+```
+
+```{r  time = TRUE}
+service_db %>%
+  count(Agency) %>%
+  rename(num_complaints = n) %>%
+  explain_and_eval
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, 'SELECT Agency, COUNT(*) as `num_complaints`
+                FROM data 
+                GROUP BY Agency') %>% head
+```
+
+# Order the result
+
+```{r  time = TRUE}
+(complaints_by_agency <-
+    service %>%
+      count(Agency, sort = TRUE))
+```
+
+```{r  time = TRUE}
+service_db %>%
+  count(Agency, sort = TRUE)
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, 'SELECT Agency, COUNT(*) as `num_complaints`
+                FROM data 
+                GROUP BY Agency
+                ORDER BY -num_complaints') %>% head
+```
+
+```{r  time = TRUE}
+## A help function, to adjust the plot order.
+## Created a ordered factor, with levels the same as input order.
+ordered_asis <- function(x) {
+    ordered(x, levels = x)
+}
+```
+
+
+I prefer dot plots instead of bar plots here, since it is easier to
+read when the columns are dense.
+
+```{r plot_complaints_by_agency, fig.width = 8, fig.height = 6, time = TRUE}
+ggplot(complaints_by_agency, aes(x = ordered_asis(Agency), y = n)) +
+  xlab("Agency") + ylab("Number of Complaints") +
+  geom_point(color = "#01AFE1" ) + scale_y_log10(labels = comma_format()) +
+theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))
+```
+
+#  Most common complaint
+
+```{r  time = TRUE}
+(complaints_by_type <- service %>%
+   count(ComplaintType, sort = TRUE))
+```
+
+```{r  time = TRUE}
+service_db %>%
+  count(ComplaintType, sort = TRUE)
+```
+
+```{r  time = TRUE}
+## Another method to count
+service %>%
+  group_by(ComplaintType) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+```
+
+Plot the top 40 complaints types. It's hard to display more than
+two hundred columns in a plot.
+
+```{r plot_complaints_by_type, fig.width = 8, fig.height = 6,  time = TRUE}
+ggplot(head(complaints_by_type, 40),
+       aes(x = ordered_asis(ComplaintType), y = n)) +
+  geom_point(color = "#01AFE1") +
+  xlab("") + ylab("Number of Complaints") +
+  scale_y_continuous(labels = comma_format()) +
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))
+```
+
+# The most common complaint in each city
+
+```{r cache=TRUE, time = TRUE}
+(complaints_by_city <- service %>%
+   count(City = toupper(City), sort = TRUE) %>%
+   filter(City != ""))
+```
+
+```{r time = TRUE}
+type_ordered <- ordered_asis(complaints_by_type$ComplaintType)
+city_ordered <- ordered_asis(complaints_by_city$City)
+type_top <- type_ordered[1:20]
+city_top <- city_ordered[1:20]
+```
+
+```{r cache=TRUE}
+(complaints_city_type <- service %>%
+   filter(City %in% city_top, ComplaintType %in% type_top) %>%
+   mutate(City = factor(City, city_top), ComplaintType = factor(ComplaintType, type_top)) %>%
+   count(City, ComplaintType))
+```
+
+```{r plot_complaints_city_type, fig.width = 8, fig.height = 6,  time = TRUE}
+ggplot(complaints_city_type,
+       aes(x = ComplaintType, y = n, fill = City, order =-as.numeric(City))) +
+  geom_bar(stat = "identity") +
+  xlab(NULL) + scale_y_continuous(labels = comma_format()) +
+  scale_fill_discrete(h = c(0, 360 * 7)) +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
+        legend.key.size = unit(14, "points"))
+```
+
+```{r plot_complaints_type_city, fig.width = 8, fig.height = 6,  time = TRUE}
+ggplot(complaints_city_type,
+       aes(x = City, y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
+  geom_bar(stat = "identity") + scale_fill_discrete(h = c(0, 360 * 7)) +
+  xlab(NULL) +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
+        legend.key.size = unit(14, "points"))
+```
+
+And if we are more interested in proportion of complaint type for each city.
+```{r plot_complaints_type_city_fill, fig.width = 8, fig.height = 6,  time = TRUE}
+ggplot(arrange(complaints_city_type, City, ComplaintType),
+       aes(x = City, y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
+  geom_bar(stat = "identity", position = "fill") + scale_fill_discrete(h = c(0, 360 * 7)) +
+  xlab(NULL) +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
+        legend.key.size = unit(14, "points"),
+        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())
+```
+
+
+# Filter rows with time stamp strings
+
+```{r filter_time, time = TRUE}
+service %>%
+  filter(CreatedDate < "2014-11-16 23:47:00",
+         CreatedDate > "2014-11-16 23:45:00") %>%
+  select(ComplaintType, CreatedDate, City)
+```
+
+```{r sdb_filter_time, time = TRUE}
+service_db %>%
+  select(ComplaintType, CreatedDate, City) %>%
+  filter(CreatedDate < "2014-11-16 23:47:00",
+         CreatedDate > "2014-11-16 23:45:00") %>%
+  explain_and_eval
+```
+
+```{r sql_filter_time, time = TRUE}
+dbGetQuery(db, "SELECT ComplaintType, CreatedDate, City
+                FROM data 
+                WHERE CreatedDate < '2014-11-16 23:47:00' 
+                AND CreatedDate > '2014-11-16 23:45:00'")
+```
+
+# Pull out the hour unit
+
+```{r  time = TRUE}
+## `strftime` in R is too slow. Demonstrate its usage with the first
+## 100,000 rows of the total over 9,000,000 rows.
+service %>%
+  slice(1:100000) %>%
+  select(CreatedDate, ComplaintType) %>%
+  mutate(hour = strftime(CreatedDate, "%H"))
+```
+
+```{r  time = TRUE}
+service_db %>%
+  select(CreatedDate, ComplaintType) %>%
+  mutate(hour = strftime("%H", CreatedDate)) %>%
+  explain_and_eval %>%
+  head(5)
+```
+
+The obove code only retrieve the first 5 rows. To compare speed fairly
+with the in-memory implementation, retrive the whole table with
+`collect`.
+
+```{r  time = TRUE}
+service_db %>%
+  select(CreatedDate, ComplaintType) %>%
+  mutate(hour = strftime("%H", CreatedDate)) %>%
+  collect
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, "SELECT CreatedDate, 
+               strftime('%H', CreatedDate) as hour, 
+               ComplaintType 
+               FROM data 
+               LIMIT 5" )
+```
+
+# Count complaints by hour
+
+```{r  time = TRUE}
+## function to pull out hour unit quickly.
+get_hour <- function(x) substr(x, 12, 13)
+```
+
+```{r  time = TRUE}
+(hour_count <- service %>%
+   mutate(hour = get_hour(CreatedDate)) %>%
+   count(hour))
+```
+
+```{r  time = TRUE}
+service_db %>%
+  mutate(hour = strftime('%H', CreatedDate)) %>%
+  count(hour) %>%
+  explain_and_eval
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, "SELECT CreatedDate, 
+               strftime('%H', CreatedDate) as hour, 
+               count(*) as `Complaints per Hour`
+               FROM data
+               GROUP BY hour" )
+```
+
+```{r  plot_complaint_by_hour_large_0, time = TRUE, fig.width = 8, fig.height = 5}
+ggplot(hour_count, aes(x = hour, y = n)) +
+  geom_bar(stat = "identity", color = "#01AFE1", fill = "#01AFE1")
+```
+
+The count of hour 0 is unusually large. Let's check their values.
+
+```{r  time = TRUE}
+service %>%
+  mutate(hour = get_hour(CreatedDate)) %>%
+  filter(hour == "00") %>%
+  select(CreatedDate, ClosedDate, hour)
+```
+
+Nothing suspicious so far. Let's check some random sample instead.
+
+```{r  time = TRUE}
+set.seed(2015)
+service %>%
+  mutate(hour = get_hour(CreatedDate)) %>%
+  filter(hour == "00") %>%
+  select(CreatedDate, ClosedDate, hour) %>%
+  sample_n(25)
+```
+
+Those "00:00:00" must mean NA.
+```{r  time = TRUE}
+service_fix_00 <- service %>%
+  mutate(hour =
+           ifelse(substring(CreatedDate, 12) == "00:00:00",
+                  NA,
+                  get_hour(CreatedDate)))
+```
+
+```{r  time = TRUE}
+hour_count_fix_00 <-
+    service_fix_00 %>%
+      count(hour)
+```
+
+```{r  plot_complaint_by_hour, time = TRUE, fig.width = 8, fig.height = 6}
+ggplot(na.omit(hour_count_fix_00),
+       aes(x = hour, y = n)) +
+  geom_bar(stat = "identity", color = "#01AFE1", fill = "#01AFE1")
+```
+
+
+# Filter noise complaints by hour
+
+```{r  time = TRUE}
+(noise_hour_count <- 
+    service_fix_00 %>%
+      filter(grepl(".*Noise.*", ComplaintType, ignore.case = TRUE)) %>%
+      count(hour))
+```
+
+```{r  time = TRUE}
+service_db %>%
+  filter(ComplaintType %LIKE% "%Noise%") %>%
+  mutate(hour = strftime('%H', CreatedDate)) %>%
+  count(hour) %>%
+  explain_and_eval
+```
+
+```{r  time = TRUE}
+dbGetQuery(db, "SELECT 
+               strftime('%H', CreatedDate) as hour, 
+               count(*) as `Complaints per Hour`
+               FROM data
+               WHERE ComplaintType LIKE '%Noise%'
+               AND NOT CreatedDate LIKE '% 00:00:00'
+               GROUP BY hour" )
+```
+
+```{r  plot_noise_hour, time = TRUE, fig.width = 8, fig.height = 8}
+ggplot(noise_hour_count,
+       aes(x = hour, y = n)) +
+  ylab("Number of complaints") + scale_y_continuous(labels = comma_format()) +
+  geom_bar(stat = "identity", color = "#01AFE1", fill = "#01AFE1")
+```
+
+# Segregate complaints by hour
+
+Count complatins by 15 minute interval
+```{r  time = TRUE}
+(complaints_type_hour <- 
+    service_fix_00 %>%
+      count(ComplaintType, hour) %>%
+      filter(ComplaintType %in% type_top) %>%
+      mutate(factor(ComplaintType, type_top)))
+```
+
+```{r  plot_hour_type, time = TRUE, fig.width = 8, fig.height = 5}
+ggplot(na.omit(complaints_type_hour),
+       aes(x = as.numeric(hour), y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
+  geom_bar(stat = "identity", position = "stack") +
+  ylab("Number of complaints") +
+  scale_fill_discrete(h = c(0, 360 * 5 )) +
+  scale_y_continuous(labels = comma_format()) +
+  xlab(NULL)
+```
+
+# Complaints per 15 minute interval
+
+```{r  time = TRUE}
+get_interval <- function(datetime) {
+    minute_interval <-
+        floor(as.numeric(substr(datetime, 15, 16)) / 15) * 15
+    paste(substr(datetime, 12, 13),   #hour
+          sprintf("%02i", minute_interval), sep = ":")
+}
+service_interval <- 
+    service_fix_00 %>%
+      filter(!is.na(hour)) %>%
+      mutate(day = substr(CreatedDate, 1, 10),
+             interval = get_interval(CreatedDate))
+```
+
+```{r  time = TRUE}
+service_interval %>%
+  select(CreatedDate, day, interval)
+```
+
+I don't know how to interpret the bar chart in original post. Draw a
+heat map instead.
+
+```{r plot_interval_heatmap, fig.width = 8, fig.height = 6, time = TRUE}
+service_interval_count <- 
+    service_interval %>%
+      filter(day >= "2015-01-01", day <= "2015-03-31") %>%
+      count(day, interval) %>% ungroup %>%
+      mutate(day = as.Date(day))
+
+ggplot(service_interval_count,
+       aes(as.Date(day), as.POSIXlt(interval, format = "%H:%M"), fill = n)) +
+  geom_tile() + scale_fill_gradient(low="green", high="red") +
+  scale_y_datetime(breaks = date_breaks("2 hour"),
+                   labels = date_format("%H:%M")) +
+  xlab("Date") + ylab("Time Interval") +
+  theme(panel.grid = element_blank())
+```
+
+The above plot is misleading. The white spots represent missing data,
+while missing from count table actually means 0, which should be
+colored as green.
+
+```{r time = TRUE}
+(default_count <-
+    local({
+        day <- seq(as.Date("2015-01-01"), as.Date("2015-03-31"), 1)
+        interval <- paste(rep(sprintf("%02i", 0:23), each = 4),
+                          c("00", "15", "30", "45"),
+                          sep = ":")
+        as.tbl(data.frame(day = rep(day, each = length(interval)),
+                          interval = interval,
+                          default = 0,
+                          stringsAsFactors = FALSE))
+    }))
+```
+
+```{r, time = TRUE}
+(service_interval_count_full <- 
+    service_interval_count %>%
+      full_join(default_count) %>%
+      mutate(n = ifelse(is.na(n), default, n)))
+```
+
+I use `full_join` here, and check the number of rows is the same as
+the rows of `default_count`, ensuring my code is correct.
+
+```{r plot_interval_heatmap_no_na, fig.width = 8, fig.height = 6, time = TRUE}
+ggplot(service_interval_count_full,
+       aes(as.Date(day), as.POSIXlt(interval, format = "%H:%M"), fill = n)) +
+  geom_tile() + scale_fill_gradient(low="green", high="red") +
+  scale_y_datetime(breaks = date_breaks("2 hour"),
+                   labels = date_format("%H:%M")) +
+  xlab("Date") + ylab("15 Minutes Time Interval") +
+  theme(panel.grid = element_blank())
+```
+
+# Session info
+Print session info for the good of reproducibility.
+```{r}
+devtools::session_info()
+```
