@@ -11,7 +11,8 @@
     "./plugins/contentHelpers.js",
     "wintersmith-asis",
     "./plugins/paginator.coffee",
-    "./node_modules/wintersmith-pandoc/"
+    "./node_modules/wintersmith-pandoc/",
+     "wintersmith-tag"
   ],
   "require": {
     "moment": "moment",
