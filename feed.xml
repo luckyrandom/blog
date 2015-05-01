@@ -2,7 +2,7 @@
 <rss version="2.0">
 <channel>
   <title>Luckyrand Blog</title>
-  <link>http://http://blog.luckyrandom.com/</link>
+  <link>http://www.luckyrandom.com/blog/</link>
   <description></description>
   
   
@@ -901,7 +901,7 @@ ordered_asis &lt;- function(x) {
   xlab(&quot;Agency&quot;) + ylab(&quot;Number of Complaints&quot;) +
   geom_point(color = &quot;#01AFE1&quot; ) + scale_y_log10(labels = comma_format()) +
 theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
 </div>
 <h1 id="most-common-complaint">Most common complaint</h1>
 <div class="code_chunk">
@@ -991,7 +991,7 @@ service %&gt;%
   xlab(&quot;&quot;) + ylab(&quot;Number of Complaints&quot;) +
   scale_y_continuous(labels = comma_format()) +
   theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
 </div>
 <h1 id="the-most-common-complaint-in-each-city">The most common complaint in each city</h1>
 <div class="code_chunk">
@@ -1063,7 +1063,7 @@ city_top &lt;- city_ordered[1:20]</code></pre>
   scale_fill_discrete(h = c(0, 360 * 7)) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;))</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(182, 121, 68)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
@@ -1077,7 +1077,7 @@ city_top &lt;- city_ordered[1:20]</code></pre>
   xlab(NULL) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;))</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
 </div>
 And if we are more interested in proportion of complaint type for each city.
 <div class="code_chunk">
@@ -1093,7 +1093,7 @@ And if we are more interested in proportion of complaint type for each city.
   theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
         legend.key.size = unit(14, &quot;points&quot;),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
 </div>
 <h1 id="filter-rows-with-time-stamp-strings">Filter rows with time stamp strings</h1>
 <div class="code_chunk">
@@ -1388,7 +1388,7 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
 
 <pre class="r"><code>ggplot(hour_count, aes(x = hour, y = n)) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
 </div>
 <p>The count of hour 0 is unusually large. Let’s check their values.</p>
 <div class="code_chunk">
@@ -1476,7 +1476,7 @@ Those “00:00:00” must mean NA.
 <pre class="r"><code>ggplot(na.omit(hour_count_fix_00),
        aes(x = hour, y = n)) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
 </div>
 <h1 id="filter-noise-complaints-by-hour">Filter noise complaints by hour</h1>
 <div class="code_chunk">
@@ -1594,7 +1594,7 @@ Those “00:00:00” must mean NA.
        aes(x = hour, y = n)) +
   ylab(&quot;Number of complaints&quot;) + scale_y_continuous(labels = comma_format()) +
   geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
 </div>
 <h1 id="segregate-complaints-by-hour">Segregate complaints by hour</h1>
 Count complatins by 15 minute interval
@@ -1638,7 +1638,7 @@ Count complatins by 15 minute interval
   scale_fill_discrete(h = c(0, 360 * 5 )) +
   scale_y_continuous(labels = comma_format()) +
   xlab(NULL)</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
 </div>
 <h1 id="complaints-per-15-minute-interval">Complaints per 15 minute interval</h1>
 <div class="code_chunk">
@@ -1702,7 +1702,7 @@ ggplot(service_interval_count,
                    labels = date_format(&quot;%H:%M&quot;)) +
   xlab(&quot;Date&quot;) + ylab(&quot;Time Interval&quot;) +
   theme(panel.grid = element_blank())</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
 </div>
 <p>The above plot is misleading. The white spots represent missing data, while missing from count table actually means 0, which should be colored as green.</p>
 <div class="code_chunk">
@@ -1777,7 +1777,7 @@ ggplot(service_interval_count,
                    labels = date_format(&quot;%H:%M&quot;)) +
   xlab(&quot;Date&quot;) + ylab(&quot;15 Minutes Time Interval&quot;) +
   theme(panel.grid = element_blank())</code></pre>
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
+<img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
 </div>
 <h1 id="session-info">Session info</h1>
 Print session info for the good of reproducibility.
