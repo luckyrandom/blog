@@ -13,7 +13,7 @@
     <link>{{ permalink }}</link>
     <guid isPermaLink="true">{{ permalink }}</guid>
     <pubDate>{{ article.rfc822date }}</pubDate>
-    <description><![CDATA[ {{ article.getHtml(url) }} ]]></description>
+    <description><![CDATA[ {{ article.getHtml((url + env.config.baseUrl))}} ]]></description>
   </item>
   {% endfor %}
 </channel>
