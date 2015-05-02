@@ -1,6 +1,7 @@
 {
   "locals": {
     "url": "http://www.luckyrandom.com",
+    "blog_base_url": "http://www.luckyrandom.com/blog/",
     "name": "The Luckyrandom's blog",
     "owner": "Chenliang Xu",
     "description": "I enjoy thinking; I know statistics; I can code."
