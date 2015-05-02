@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<rss version="2.0">
+<channel>
+  <title>Luckyrandom Blog</title>
+  <link> http://www.luckyrandom.com/blog/tag/{{tagName}}/ </link>
+  <description>{{ tagline }}</description>
+  {% for article in articles %}
+  {% set permalink = url + article.url %}
+  <item>
+    <title>{{ article.title }}</title>
+    <author>{{ author }}</author>
+    <link>{{ permalink }}</link>
+    <guid isPermaLink="true">{{ permalink }}</guid>
+    <pubDate>{{ article.rfc822date }}</pubDate>
+    <description><![CDATA[ {{ article.getHtml((url + env.config.baseUrl))}} ]]></description>
+  </item>
+  {% endfor %}
+</channel>
+</rss>
