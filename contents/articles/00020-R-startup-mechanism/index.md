@@ -3,6 +3,7 @@ title: R startup mechanism
 author: Chenliang Xu
 date: 2014-07-19 12:30
 template: post.html
+tags: R
 ---
 
 R startup with the following steps,

@@ -3,6 +3,7 @@ title: R library search path
 author: Chenliang Xu
 date: 2014-07-22 17:00
 template: post.html
+tags: R
 ---
 
 When 'library()' or 'require()' is called, R load packages from

@@ -3,6 +3,7 @@ title: Manipulate semantic tree of R language
 author: Chenliang Xu
 date: 2014-11-09 21:30
 template: post.html
+tags: R
 ---
 
 _This is basically a reading note on chapter

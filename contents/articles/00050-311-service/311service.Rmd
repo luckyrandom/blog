@@ -4,6 +4,7 @@ subtitle: "Reimplement analytics of NYC 311 service data in R"
 author: Chenliang Xu
 date: 2015-04-29 18:00
 template: post.html
+tags: R
 ---
 <style type="text/css">
 div.code_chunk {
