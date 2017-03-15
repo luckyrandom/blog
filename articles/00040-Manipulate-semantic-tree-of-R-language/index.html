@@ -54,16 +54,16 @@
                                   
 					<p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
 <p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as is</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s &lt;- s + x})
-quote_for</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for &lt;-<span class="st"> </span><span class="kw">quote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s &lt;-<span class="st"> </span>s +<span class="st"> </span>x})
+quote_for</code></pre></div>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + x
 ## }</code></pre>
 <p>It works on semantic level, so the input must be a valid R expression,</p>
-<pre class="r"><code>## This will lead to an error
-## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## This will lead to an error
+## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre></div>
 <p>The returned result is a R language object, composed of calls and symbols. We can get elements from the semantic tree,</p>
-<pre class="r"><code>quote_for[[1]]; quote_for[[2]]; quote_for[[3]]; quote_for[[4]];</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for[[<span class="dv">1</span>]]; quote_for[[<span class="dv">2</span>]]; quote_for[[<span class="dv">3</span>]]; quote_for[[<span class="dv">4</span>]];</code></pre></div>
 <pre><code>## `for`</code></pre>
 <pre><code>## x</code></pre>
 <pre><code>## 1:3</code></pre>
@@ -71,47 +71,47 @@ quote_for</code></pre>
 ##     s &lt;- s + x
 ## }</code></pre>
 <p>and even set elements,</p>
-<pre class="r"><code>quote_for[[3]] &lt;- quote(1:10)
-quote_for</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for[[<span class="dv">3</span>]] &lt;-<span class="st"> </span><span class="kw">quote</span>(<span class="dv">1</span>:<span class="dv">10</span>)
+quote_for</code></pre></div>
 <pre><code>## for (x in 1:10) {
 ##     s &lt;- s + x
 ## }</code></pre>
-<pre class="r"><code>s  &lt;- 0
-eval(quote_for)
-s</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s  &lt;-<span class="st"> </span><span class="dv">0</span>
+<span class="kw">eval</span>(quote_for)
+s</code></pre></div>
 <pre><code>## [1] 55</code></pre>
 <p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its behavior is unnecessarily complex, - If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute - If the argument <code>env</code> is not <code>.GlobalEnv</code> - If the argument <code>expr</code> is a promise object, get the expression slot of the promise without any substitute. The is typically used to capture unevaluated expression from caller function. - If the argument <code>expr</code> is not a promise object, substitute the unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></p>
 <p>This is a very bad design, that a function might do totally different things depending on the running environment. Such a complex design makes it hard to guess its behavior.</p>
 <p>Following suggestions in book <em>Advanced R</em>, we define a few helper functions, each of which does only one job clearly. Note the name of functions are different from Advanced R. The suffix <code>*_s</code> means standard evaluation, so it’s the caller’s responsibility to quote code explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
-<pre class="r"><code>## The definition here may be hard to follow. Please focus on the
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The definition here may be hard to follow. Please focus on the
 ## usage explained below, instead of the ugly implementation. If you
 ## are curiouse about the implementation, please read Advaned R.
-substitute_q &lt;- function(expr, env = emptyenv()) {
-  expr &lt;- substitute(expr)
-  if (identical(env, globalenv())) {
-    env &lt;- as.list(env)
+substitute_q &lt;-<span class="st"> </span>function(expr, <span class="dt">env =</span> <span class="kw">emptyenv</span>()) {
+  expr &lt;-<span class="st"> </span><span class="kw">substitute</span>(expr)
+  if (<span class="kw">identical</span>(env, <span class="kw">globalenv</span>())) {
+    env &lt;-<span class="st"> </span><span class="kw">as.list</span>(env)
   }
-  eval(substitute(substitute(expr, env), list(expr = expr)))
+  <span class="kw">eval</span>(<span class="kw">substitute</span>(<span class="kw">substitute</span>(expr, env), <span class="kw">list</span>(<span class="dt">expr =</span> expr)))
 }
 
-substitute_s &lt;- function(expr, env = emptyenv()) {
-  call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
-  eval(call)
-}</code></pre>
+substitute_s &lt;-<span class="st"> </span>function(expr, <span class="dt">env =</span> <span class="kw">emptyenv</span>()) {
+  call &lt;-<span class="st"> </span><span class="kw">substitute_q</span>(<span class="kw">substitute_q</span>(x, env), <span class="kw">list</span>(<span class="dt">x =</span> expr))
+  <span class="kw">eval</span>(call)
+}</code></pre></div>
 <p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For example,</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s  &lt;- s + x})
-substitute_s(quote_for, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for &lt;-<span class="st"> </span><span class="kw">quote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>x})
+<span class="kw">substitute_s</span>(quote_for, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>
 <p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code> automatically, so the caller doesn’t need to quote the code and must pass the argument <code>expr</code> lexically. It seems to be convenient, but may cause some issue since we cannot pass the quoted code saved in a variable to <code>substitute_q</code>.</p>
-<pre class="r"><code>substitute_q(for(x in 1:3){ s  &lt;- s + x}, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">substitute_q</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>x}, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>
 <p><code>bquote</code> is similar but provides better control. It return unevaluated semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
-<pre class="r"><code>## The result is not meaningful. Why do I do that? Because I can.
-bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The result is not meaningful. Why do I do that? Because I can.
+<span class="kw">bquote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>.(x)}, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>

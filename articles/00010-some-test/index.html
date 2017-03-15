@@ -55,10 +55,10 @@
 					<p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>. The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
 <p><span class="more"></span></p>
 <h3 id="javascript">JavaScript</h3>
-<pre class="javascript"><code>function getRandomNumber() {
-    return 4; // chosen by fair dice roll.
-              // guaranteed to be random.
-}</code></pre>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">getRandomNumber</span>() <span class="op">{</span>
+    <span class="cf">return</span> <span class="dv">4</span><span class="op">;</span> <span class="co">// chosen by fair dice roll.</span>
+              <span class="co">// guaranteed to be random.</span>
+<span class="op">}</span></code></pre></div>
 <h3 id="coffeescript">CoffeeScript</h3>
 <pre class="coffeescript"><code>class Animal
   ### Intellegent design ###
@@ -75,59 +75,59 @@ class Human extends Monkey
   speak: -&gt;
     print [&#39;yolo&#39; unless i % 3] + [&#39;swag&#39; unless i % 5] or i for i in [1..100]</code></pre>
 <h3 id="c">C</h3>
-<pre class="c"><code>#include &lt;stdio.h&gt;
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
 
-int main(void)
+<span class="dt">int</span> main(<span class="dt">void</span>)
 {
-  printf(&quot;Hello world\n&quot;);
-  return 0;
-}</code></pre>
+  printf(<span class="st">&quot;Hello world</span><span class="ch">\n</span><span class="st">&quot;</span>);
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="c-1">C++</h3>
-<pre class="cpp"><code>#include &lt;iostream&gt;
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
 
-int main()
+<span class="dt">int</span> main()
 {
-  std::cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; std::endl;
-  return 0;
-}</code></pre>
+  std::cout &lt;&lt; <span class="st">&quot;Hello World!&quot;</span> &lt;&lt; std::endl;
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="c-sharp">C-sharp</h3>
-<pre class="cs"><code>class ExampleClass
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">class</span> ExampleClass
 {
-    static void Main()
+    <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
     {
-        System.Console.WriteLine(&quot;Hello, world!&quot;);
+        System.<span class="fu">Console</span>.<span class="fu">WriteLine</span>(<span class="st">&quot;Hello, world!&quot;</span>);
     }
-}</code></pre>
+}</code></pre></div>
 <h3 id="erlang">Erlang</h3>
-<pre class="erlang"><code>io:format(&quot;~s~n&quot;, [&quot;hello, world&quot;])</code></pre>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">io:format(</span><span class="st">&quot;~s~n&quot;</span><span class="fu">,</span> <span class="fu">[</span><span class="st">&quot;hello, world&quot;</span><span class="fu">])</span></code></pre></div>
 <h3 id="go">Go</h3>
-<pre class="go"><code>package main
+<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">package</span> main
 
-import &quot;fmt&quot;
+<span class="kw">import</span> <span class="st">&quot;fmt&quot;</span>
 
-func main() {
-   fmt.Println(&quot;Hello World!&quot;)
-}</code></pre>
+<span class="kw">func</span> main() {
+   fmt.Println(<span class="st">&quot;Hello World!&quot;</span>)
+}</code></pre></div>
 <h3 id="java">Java</h3>
-<pre class="java"><code>public class HelloWorld {
-   public static void main(String[] args) {
-       System.out.println(&quot;Hello world!&quot;);
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> HelloWorld {
+   <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(String[] args) {
+       System.<span class="fu">out</span>.<span class="fu">println</span>(<span class="st">&quot;Hello world!&quot;</span>);
    }
-}</code></pre>
+}</code></pre></div>
 <h3 id="objectivec">ObjectiveC</h3>
-<pre class="objectivec"><code>#import &lt;stdio.h&gt;
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="ot">#import &lt;stdio.h&gt;</span>
 
-int main(void)
+<span class="dt">int</span> main(<span class="dt">void</span>)
 {
-    printf(&quot;Hello, World!\n&quot;);
-    return 0;
-}</code></pre>
+    printf(<span class="st">&quot;Hello, World!</span><span class="ch">\n</span><span class="st">&quot;</span>);
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="php">PHP</h3>
-<pre class="php"><code>&lt;?php echo &#39;Hello, world&#39;; ?&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span> <span class="fu">echo</span> <span class="st">&#39;Hello, world&#39;</span><span class="ot">;</span> <span class="kw">?&gt;</span></code></pre></div>
 <h3 id="python">Python</h3>
-<pre class="python"><code>print(&quot;Hello World&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(<span class="st">&quot;Hello World&quot;</span>)</code></pre></div>
 <h3 id="ruby">Ruby</h3>
-<pre class="ruby"><code>puts &quot;Hello world!&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">puts <span class="st">&quot;Hello world!&quot;</span></code></pre></div>
 
 
                                         <!--  disqus  -->

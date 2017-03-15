@@ -12,7 +12,7 @@
     <author></author>
     <link>http://www.luckyrandom.com/blog/articles/00050-311-service/</link>
     <guid isPermaLink="true">http://www.luckyrandom.com/blog/articles/00050-311-service/</guid>
-    <pubDate>Wed, 29 Apr 2015 18:00:00 -0500</pubDate>
+    <pubDate>Wed, 29 Apr 2015 18:00:00 -0700</pubDate>
     <description><![CDATA[ <style type="text/css">
 div.code_chunk {
 border-left: rgb(123, 218, 123);
@@ -63,10 +63,10 @@ font-size: 0.6em;
 <p>This post is written in <code>rmarkdown</code> and rendered by <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://pandoc.org/">pandoc</a>, or can be rendered by <a href="http://rmarkdown.rstudio.com/">R Markdown v2</a>, if you prefer. The CPU time is measured with some special hook of knitr, and reported both as number and color of header of each chunk, with red representing long run time. Please check the source code if you are interested in the implementation.</p>
 <h2 id="load-dataset">Load dataset</h2>
 <div class="code_chunk">
-<pre class="r"><code>## load R packages
-library(readr)
-library(plyr)
-library(dplyr)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load R packages
+<span class="kw">library</span>(readr)
+<span class="kw">library</span>(plyr)
+<span class="kw">library</span>(dplyr)</code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;
 ## 
@@ -82,19 +82,19 @@ library(dplyr)</code></pre>
 ## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(scales)
-library(ggplot2)
-library(DBI)
-library(grid)
-theme_update(plot.background = element_blank(),
-             legend.background = element_blank())</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(DBI)
+<span class="kw">library</span>(grid)
+<span class="kw">theme_update</span>(<span class="dt">plot.background =</span> <span class="kw">element_blank</span>(),
+             <span class="dt">legend.background =</span> <span class="kw">element_blank</span>())</code></pre></div>
 </div>
 <p>Load a few lines to check the structure.</p>
 <div class="code_chunk">
-<pre class="r"><code>## Data file is stored in sub-directory `noshare`
-file_311 &lt;- file.path(&quot;noshare&quot;,
-                      &quot;311_Service_Requests_from_2010_to_Present.csv&quot;)
-(head_service &lt;- read_csv(file_311, n_max = 100))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Data file is stored in sub-directory `noshare`
+file_311 &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;noshare&quot;</span>,
+                      <span class="st">&quot;311_Service_Requests_from_2010_to_Present.csv&quot;</span>)
+(head_service &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file_311, <span class="dt">n_max =</span> <span class="dv">100</span>))</code></pre></div>
 <pre><code>## Source: local data frame [100 x 52]
 ## 
 ##    Unique Key           Created Date            Closed Date Agency
@@ -132,22 +132,21 @@ file_311 &lt;- file.path(&quot;noshare&quot;,
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.012 | system: 0.001 | elapsed: 0.012</pre>
-
-<pre class="r"><code>load_columns &lt;- c(&#39;Agency&#39;, &#39;Created Date&#39;, &#39;Closed Date&#39;,
-                  &#39;Complaint Type&#39;, &#39;Descriptor&#39;, &#39;City&#39;)
-col_types &lt;- rep(list(col_skip()), length(colnames(head_service)))
-names(col_types) &lt;- colnames(head_service)
-col_types[load_columns] &lt;- rep(list(col_character()), 6) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_columns &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Agency&#39;</span>, <span class="st">&#39;Created Date&#39;</span>, <span class="st">&#39;Closed Date&#39;</span>,
+                  <span class="st">&#39;Complaint Type&#39;</span>, <span class="st">&#39;Descriptor&#39;</span>, <span class="st">&#39;City&#39;</span>)
+col_types &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">list</span>(<span class="kw">col_skip</span>()), <span class="kw">length</span>(<span class="kw">colnames</span>(head_service)))
+<span class="kw">names</span>(col_types) &lt;-<span class="st"> </span><span class="kw">colnames</span>(head_service)
+col_types[load_columns] &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">list</span>(<span class="kw">col_character</span>()), <span class="dv">6</span>) </code></pre></div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user:  82.88 | system:   8.53 | elapsed: 118.16</pre>
-
-<pre class="r"><code>system.time(service_char &lt;-
-    read_delim(file_311, delim = &quot;,&quot;, col_types = col_types, progress = FALSE))</code></pre>
-<pre><code>## |================================================================================| 100% 4420 MB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(service_char &lt;-
+<span class="st">    </span><span class="kw">read_delim</span>(file_311, <span class="dt">delim =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">col_types =</span> col_types, <span class="dt">progress =</span> <span class="ot">FALSE</span>))</code></pre></div>
+<pre><code>## 
+|================================================================================| 100% 4420 MB</code></pre>
 <pre><code>##    user  system elapsed 
 ##  82.834   8.526 118.111</code></pre>
 </div>
@@ -157,21 +156,20 @@ col_types[load_columns] &lt;- rep(list(col_character()), 6) </code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 233.79 | system:   9.06 | elapsed: 246.21</pre>
-
-<pre class="r"><code>## rm white space in column names 
-colnames(service_char) &lt;- sub(&quot; &quot;, &quot;&quot;, colnames(service_char))
-time_format &lt;- &quot;%m/%d/%Y %I:%M:%S %p&quot;
-service &lt;- within(service_char, {
-                      Agency &lt;- as.factor(Agency)
-                      CreatedDate  &lt;-  strftime(as.POSIXlt(CreatedDate, format = time_format))
-                      ClosedDate &lt;-  strftime(as.POSIXlt(ClosedDate, format = time_format))
-                      ComplaintType  &lt;- as.factor(ComplaintType)
-                      City &lt;- as.factor(City)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## rm white space in column names 
+<span class="kw">colnames</span>(service_char) &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">colnames</span>(service_char))
+time_format &lt;-<span class="st"> &quot;%m/%d/%Y %I:%M:%S %p&quot;</span>
+service &lt;-<span class="st"> </span><span class="kw">within</span>(service_char, {
+                      Agency &lt;-<span class="st"> </span><span class="kw">as.factor</span>(Agency)
+                      CreatedDate  &lt;-<span class="st">  </span><span class="kw">strftime</span>(<span class="kw">as.POSIXlt</span>(CreatedDate, <span class="dt">format =</span> time_format))
+                      ClosedDate &lt;-<span class="st">  </span><span class="kw">strftime</span>(<span class="kw">as.POSIXlt</span>(ClosedDate, <span class="dt">format =</span> time_format))
+                      ComplaintType  &lt;-<span class="st"> </span><span class="kw">as.factor</span>(ComplaintType)
+                      City &lt;-<span class="st"> </span><span class="kw">as.factor</span>(City)
                   })
-print(object.size(service), units = &quot;Mb&quot;)</code></pre>
+<span class="kw">print</span>(<span class="kw">object.size</span>(service), <span class="dt">units =</span> <span class="st">&quot;Mb&quot;</span>)</code></pre></div>
 <pre><code>## 829.6 Mb</code></pre>
-<pre class="r"><code>rm(service_char)
-gc()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(service_char)
+<span class="kw">gc</span>()</code></pre></div>
 <pre><code>##             used  (Mb) gc trigger   (Mb)  max used   (Mb)
 ## Ncells   7363033 393.3   41814278 2233.2  41615065 2222.5
 ## Vcells 102734572 783.9  517222059 3946.1 645682158 4926.2</code></pre>
@@ -183,8 +181,7 @@ gc()</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 216, 122)); /* Standard syntax; must be last */">user: 0.012 | system: 0.002 | elapsed: 0.018</pre>
-
-<pre class="r"><code>service</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service</code></pre></div>
 <pre><code>## Source: local data frame [9,115,505 x 6]
 ## 
 ##            CreatedDate          ClosedDate Agency
@@ -208,17 +205,16 @@ gc()</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(128, 210, 118)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(128, 210, 118)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(128, 210, 118)); /* Standard syntax; must be last */">user: 0.050 | system: 0.006 | elapsed: 0.075</pre>
-
-<pre class="r"><code>sql_file &lt;- file.path(&quot;noshare&quot;, &quot;service.sqlite&quot;)
-if( !file.exists( sql_file ) ||
-   file.mtime(file_311) &gt; file.mtime( sql_file ) ) {
-    db &lt;- dbConnect(RSQLite::SQLite(), sql_file)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sql_file &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;noshare&quot;</span>, <span class="st">&quot;service.sqlite&quot;</span>)
+if( !<span class="kw">file.exists</span>( sql_file ) ||
+<span class="st">   </span><span class="kw">file.mtime</span>(file_311) &gt;<span class="st"> </span><span class="kw">file.mtime</span>( sql_file ) ) {
+    db &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw">SQLite</span>(), sql_file)
     ## Temperary fix for issue https://github.com/rstats-db/RSQLite/issues/82
-    setOldClass(c(&quot;tbl_df&quot;, &quot;data.frame&quot;))
-    dbWriteTable(db, &quot;data&quot;, service, row.names = FALSE, overwrite = FALSE)
+    <span class="kw">setOldClass</span>(<span class="kw">c</span>(<span class="st">&quot;tbl_df&quot;</span>, <span class="st">&quot;data.frame&quot;</span>))
+    <span class="kw">dbWriteTable</span>(db, <span class="st">&quot;data&quot;</span>, service, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">overwrite =</span> <span class="ot">FALSE</span>)
 } else {
-    db &lt;- dbConnect(RSQLite::SQLite(), sql_file)
-}</code></pre>
+    db &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw">SQLite</span>(), sql_file)
+}</code></pre></div>
 </div>
 <p>Create dplyr wrap of SQLite database.</p>
 <div class="code_chunk">
@@ -226,15 +222,14 @@ if( !file.exists( sql_file ) ||
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(125, 215, 121)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(125, 215, 121)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(125, 215, 121)); /* Standard syntax; must be last */">user: 0.019 | system: 0.002 | elapsed: 0.028</pre>
-
-<pre class="r"><code>service_db &lt;- tbl(src_sqlite(sql_file, create = FALSE), &quot;data&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db &lt;-<span class="st"> </span><span class="kw">tbl</span>(<span class="kw">src_sqlite</span>(sql_file, <span class="dt">create =</span> <span class="ot">FALSE</span>), <span class="st">&quot;data&quot;</span>)</code></pre></div>
 </div>
 <p><code>service</code> is a dplyr wrap of in memory data.frame, and <code>service_db</code> is a dplyr wrap of the SQLite database. They share similar interfaces, and most functions that applied to one object can be applied to the other object without any change. <code>dplyr</code> translates the function calls applied to <code>service_db</code> to SQL command, which can be checked with function <code>explain</code>. The following function is defined to check the SQL command and then retrieve the value.</p>
 <div class="code_chunk">
-<pre class="r"><code>explain_and_eval &lt;- function(x, ...) {
-    print(explain(x, ...))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">explain_and_eval &lt;-<span class="st"> </span>function(x, ...) {
+    <span class="kw">print</span>(<span class="kw">explain</span>(x, ...))
     x
-}</code></pre>
+}</code></pre></div>
 </div>
 <h1 id="preview-the-table">Preview the table</h1>
 <div class="code_chunk">
@@ -242,8 +237,7 @@ if( !file.exists( sql_file ) ||
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.006 | system: 0.000 | elapsed: 0.006</pre>
-
-<pre class="r"><code>dbGetQuery(db, &#39;SELECT * FROM data LIMIT 3&#39;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&#39;SELECT * FROM data LIMIT 3&#39;</span>)</code></pre></div>
 <pre><code>##           CreatedDate          ClosedDate Agency            ComplaintType
 ## 1 2015-04-12 02:41:17                &lt;NA&gt;    DOT         Street Condition
 ## 2 2015-04-12 02:08:53 2015-04-12 02:09:52    HRA Benefit Card Replacement
@@ -258,8 +252,7 @@ if( !file.exists( sql_file ) ||
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.005 | system: 0.000 | elapsed: 0.006</pre>
-
-<pre class="r"><code>print.data.frame(head(service, 3))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print.data.frame</span>(<span class="kw">head</span>(service, <span class="dv">3</span>))</code></pre></div>
 <pre><code>##           CreatedDate          ClosedDate Agency            ComplaintType
 ## 1 2015-04-12 02:41:17                &lt;NA&gt;    DOT         Street Condition
 ## 2 2015-04-12 02:08:53 2015-04-12 02:09:52    HRA Benefit Card Replacement
@@ -274,9 +267,8 @@ if( !file.exists( sql_file ) ||
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(131, 205, 116)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(131, 205, 116)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(131, 205, 116)); /* Standard syntax; must be last */">user: 0.045 | system: 0.057 | elapsed: 0.115</pre>
-
-<pre class="r"><code>## A different way to check the structure of object
-str(service)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## A different way to check the structure of object
+<span class="kw">str</span>(service)</code></pre></div>
 <pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    9115505 obs. of  6 variables:
 ##  $ CreatedDate  : chr  &quot;2015-04-12 02:41:17&quot; &quot;2015-04-12 02:08:53&quot; &quot;2015-04-12 02:08:40&quot; &quot;2015-04-12 02:08:24&quot; ...
 ##  $ ClosedDate   : chr  NA &quot;2015-04-12 02:09:52&quot; NA NA ...
@@ -290,8 +282,7 @@ str(service)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.01 | system: 0.00 | elapsed: 0.01</pre>
-
-<pre class="r"><code>head(service, 3)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(service, <span class="dv">3</span>)</code></pre></div>
 <pre><code>## Source: local data frame [3 x 6]
 ## 
 ##           CreatedDate          ClosedDate Agency            ComplaintType
@@ -305,8 +296,7 @@ str(service)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.01 | system: 0.00 | elapsed: 0.01</pre>
-
-<pre class="r"><code>head(service_db, 3)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(service_db, <span class="dv">3</span>)</code></pre></div>
 <pre><code>##           CreatedDate          ClosedDate Agency            ComplaintType
 ## 1 2015-04-12 02:41:17                &lt;NA&gt;    DOT         Street Condition
 ## 2 2015-04-12 02:08:53 2015-04-12 02:09:52    HRA Benefit Card Replacement
@@ -322,8 +312,7 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.009 | system: 0.000 | elapsed: 0.009</pre>
-
-<pre class="r"><code>service</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service</code></pre></div>
 <pre><code>## Source: local data frame [9,115,505 x 6]
 ## 
 ##            CreatedDate          ClosedDate Agency
@@ -345,8 +334,7 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user:  0.605 | system:  2.153 | elapsed: 10.347</pre>
-
-<pre class="r"><code>service_db</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: data [9,115,505 x 6]
 ## 
@@ -370,8 +358,7 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.006 | system: 0.000 | elapsed: 0.006</pre>
-
-<pre class="r"><code>service[1:3, c(&quot;Agency&quot;, &quot;Descriptor&quot;)]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service[<span class="dv">1</span>:<span class="dv">3</span>, <span class="kw">c</span>(<span class="st">&quot;Agency&quot;</span>, <span class="st">&quot;Descriptor&quot;</span>)]</code></pre></div>
 <pre><code>## Source: local data frame [3 x 2]
 ## 
 ##   Agency       Descriptor
@@ -384,10 +371,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 216, 122)); /* Standard syntax; must be last */">user: 0.014 | system: 0.002 | elapsed: 0.019</pre>
-
-<pre class="r"><code>service %&gt;%
-  select(Agency, Descriptor) %&gt;%
-  head(3)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">select</span>(Agency, Descriptor) %&gt;%
+<span class="st">  </span><span class="kw">head</span>(<span class="dv">3</span>)</code></pre></div>
 <pre><code>## Source: local data frame [3 x 2]
 ## 
 ##   Agency       Descriptor
@@ -400,10 +386,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.012 | system: 0.001 | elapsed: 0.012</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(Agency, Descriptor) %&gt;%
-  head(3)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(Agency, Descriptor) %&gt;%
+<span class="st">  </span><span class="kw">head</span>(<span class="dv">3</span>)</code></pre></div>
 <pre><code>##   Agency       Descriptor
 ## 1    DOT          Pothole
 ## 2    HRA         Medicaid
@@ -414,8 +399,7 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.005 | system: 0.000 | elapsed: 0.005</pre>
-
-<pre class="r"><code>dbGetQuery(db, &#39;SELECT Agency, Descriptor FROM data LIMIT 3&#39;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&#39;SELECT Agency, Descriptor FROM data LIMIT 3&#39;</span>)</code></pre></div>
 <pre><code>##   Agency       Descriptor
 ## 1    DOT          Pothole
 ## 2    HRA         Medicaid
@@ -427,10 +411,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(177, 128, 72)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(177, 128, 72)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(177, 128, 72)); /* Standard syntax; must be last */">user: 0.730 | system: 0.092 | elapsed: 0.824</pre>
-
-<pre class="r"><code>service %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency == &quot;NYPD&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency ==<span class="st"> &quot;NYPD&quot;</span>)</code></pre></div>
 <pre><code>## Source: local data frame [1,021,412 x 3]
 ## 
 ##              ComplaintType       Descriptor Agency
@@ -451,10 +434,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 1.669 | system: 0.874 | elapsed: 2.550</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency == &quot;NYPD&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency ==<span class="st"> &quot;NYPD&quot;</span>)</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: data [1,021,412 x 3]
 ## Filter: Agency == &quot;NYPD&quot; 
@@ -478,10 +460,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 1.672 | system: 0.874 | elapsed: 2.552</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency == &quot;NYPD&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency ==<span class="st"> &quot;NYPD&quot;</span>)</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: data [1,021,412 x 3]
 ## Filter: Agency == &quot;NYPD&quot; 
@@ -504,12 +485,11 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.007 | system: 0.001 | elapsed: 0.007</pre>
-
-<pre class="r"><code>dbGetQuery(db,
-           &#39;SELECT ComplaintType, Descriptor, Agency
-           FROM data
-           WHERE Agency = &quot;NYPD&quot;
-           LIMIT 10&#39;)           </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db,
+           <span class="st">&#39;SELECT ComplaintType, Descriptor, Agency</span>
+<span class="st">           FROM data</span>
+<span class="st">           WHERE Agency = &quot;NYPD&quot;</span>
+<span class="st">           LIMIT 10&#39;</span>)           </code></pre></div>
 <pre><code>##              ComplaintType       Descriptor Agency
 ## 1       Noise - Commercial Loud Music/Party   NYPD
 ## 2  Noise - Street/Sidewalk     Loud Talking   NYPD
@@ -528,9 +508,8 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(173, 135, 76)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(173, 135, 76)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(173, 135, 76)); /* Standard syntax; must be last */">user: 0.633 | system: 0.122 | elapsed: 0.761</pre>
-
-<pre class="r"><code>subset(service, Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;),
-       select = c(&quot;ComplaintType&quot;, &quot;Descriptor&quot;, &quot;Agency&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(service, Agency %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NYPD&quot;</span>, <span class="st">&quot;DOB&quot;</span>),
+       <span class="dt">select =</span> <span class="kw">c</span>(<span class="st">&quot;ComplaintType&quot;</span>, <span class="st">&quot;Descriptor&quot;</span>, <span class="st">&quot;Agency&quot;</span>))</code></pre></div>
 <pre><code>## Source: local data frame [1,496,758 x 3]
 ## 
 ##              ComplaintType       Descriptor Agency
@@ -551,10 +530,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(150, 174, 98)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(150, 174, 98)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(150, 174, 98)); /* Standard syntax; must be last */">user: 0.351 | system: 0.054 | elapsed: 0.404</pre>
-
-<pre class="r"><code>service %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NYPD&quot;</span>, <span class="st">&quot;DOB&quot;</span>))</code></pre></div>
 <pre><code>## Source: local data frame [1,496,758 x 3]
 ## 
 ##              ComplaintType       Descriptor Agency
@@ -575,11 +553,10 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(148, 177, 100)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(148, 177, 100)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(148, 177, 100)); /* Standard syntax; must be last */">user: 0.341 | system: 0.037 | elapsed: 0.378</pre>
-
-<pre class="r"><code>service %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;)) %&gt;%
-  slice(1:10)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NYPD&quot;</span>, <span class="st">&quot;DOB&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span>:<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Source: local data frame [10 x 3]
 ## 
 ##              ComplaintType       Descriptor Agency
@@ -599,10 +576,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 2.152 | system: 0.886 | elapsed: 3.045</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NYPD&quot;</span>, <span class="st">&quot;DOB&quot;</span>))</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: data [1,496,758 x 3]
 ## Filter: Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;) 
@@ -625,10 +601,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 216, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 216, 122)); /* Standard syntax; must be last */">user: 0.017 | system: 0.000 | elapsed: 0.017</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(ComplaintType, Descriptor, Agency) %&gt;%
-  filter(Agency %in% c(&quot;NYPD&quot;, &quot;DOB&quot;)) %&gt;% head(10)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, Descriptor, Agency) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Agency %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NYPD&quot;</span>, <span class="st">&quot;DOB&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>##              ComplaintType       Descriptor Agency
 ## 1       Noise - Commercial Loud Music/Party   NYPD
 ## 2  Noise - Street/Sidewalk     Loud Talking   NYPD
@@ -646,12 +621,11 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.007 | system: 0.000 | elapsed: 0.007</pre>
-
-<pre class="r"><code>dbGetQuery(db, 
-           &#39;SELECT ComplaintType, Descriptor, Agency 
-            FROM data 
-            WHERE Agency IN (&quot;NYPD&quot;, &quot;DOB&quot;)
-            LIMIT 10&#39;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, 
+           <span class="st">&#39;SELECT ComplaintType, Descriptor, Agency </span>
+<span class="st">            FROM data </span>
+<span class="st">            WHERE Agency IN (&quot;NYPD&quot;, &quot;DOB&quot;)</span>
+<span class="st">            LIMIT 10&#39;</span>)</code></pre></div>
 <pre><code>##              ComplaintType       Descriptor Agency
 ## 1       Noise - Commercial Loud Music/Party   NYPD
 ## 2  Noise - Street/Sidewalk     Loud Talking   NYPD
@@ -670,8 +644,7 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(132, 204, 115)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(132, 204, 115)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(132, 204, 115)); /* Standard syntax; must be last */">user: 0.116 | system: 0.012 | elapsed: 0.130</pre>
-
-<pre class="r"><code>head(unique(service$City))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">unique</span>(service$City))</code></pre></div>
 <pre><code>## [1]                  NEW YORK         LONG ISLAND CITY ASTORIA         
 ## [5] BROOKLYN         FLUSHING        
 ## 1817 Levels:  * / /A 0 00 000 0000 0000 0000 000000 00000000000 ... YORKTOWN HEIGHTS</code></pre>
@@ -682,10 +655,9 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(125, 215, 121)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(125, 215, 121)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(125, 215, 121)); /* Standard syntax; must be last */">user: 0.025 | system: 0.000 | elapsed: 0.026</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  summarize(distinct(City)) %&gt;%
-  explain_and_eval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="kw">distinct</span>(City)) %&gt;%
+<span class="st">  </span>explain_and_eval</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;distinct(City)&quot;
 ## FROM (SELECT DISTINCT(&quot;City&quot;) AS &quot;distinct(City)&quot;
@@ -719,9 +691,8 @@ We don’t have to call <code>head</code>, as I mentioned above.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 4.829 | system: 0.939 | elapsed: 5.779</pre>
-
-<pre class="r"><code>distinct_city &lt;- dbGetQuery(db, &#39;SELECT DISTINCT City FROM data&#39;)
-head(distinct_city)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">distinct_city &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(db, <span class="st">&#39;SELECT DISTINCT City FROM data&#39;</span>)
+<span class="kw">head</span>(distinct_city)</code></pre></div>
 <pre><code>##               City
 ## 1                 
 ## 2         NEW YORK
@@ -736,10 +707,9 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(146, 179, 101)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(146, 179, 101)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(146, 179, 101)); /* Standard syntax; must be last */">user: 0.291 | system: 0.062 | elapsed: 0.355</pre>
-
-<pre class="r"><code>service %&gt;%
-  count(Agency) %&gt;%
-  rename(num_complaints = n)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">count</span>(Agency) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">num_complaints =</span> n)</code></pre></div>
 <pre><code>## Source: local data frame [64 x 2]
 ## 
 ##    Agency num_complaints
@@ -760,11 +730,10 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 12.14 | system:  1.91 | elapsed: 14.15</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  count(Agency) %&gt;%
-  rename(num_complaints = n) %&gt;%
-  explain_and_eval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">count</span>(Agency) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">num_complaints =</span> n) %&gt;%
+<span class="st">  </span>explain_and_eval</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;Agency&quot; AS &quot;Agency&quot;, &quot;n&quot; AS &quot;num_complaints&quot;
 ## FROM (SELECT &quot;Agency&quot;, COUNT() AS &quot;n&quot;
@@ -798,10 +767,9 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 14.66 | system:  1.95 | elapsed: 16.67</pre>
-
-<pre class="r"><code>dbGetQuery(db, &#39;SELECT Agency, COUNT(*) as `num_complaints`
-                FROM data 
-                GROUP BY Agency&#39;) %&gt;% head</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&#39;SELECT Agency, COUNT(*) as `num_complaints`</span>
+<span class="st">                FROM data </span>
+<span class="st">                GROUP BY Agency&#39;</span>) %&gt;%<span class="st"> </span>head</code></pre></div>
 <pre><code>##   Agency num_complaints
 ## 1  3-1-1          22501
 ## 2    ACS              3
@@ -816,10 +784,9 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(144, 183, 103)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(144, 183, 103)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(144, 183, 103)); /* Standard syntax; must be last */">user: 0.272 | system: 0.048 | elapsed: 0.321</pre>
-
-<pre class="r"><code>(complaints_by_agency &lt;-
-    service %&gt;%
-      count(Agency, sort = TRUE))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(complaints_by_agency &lt;-
+<span class="st">    </span>service %&gt;%
+<span class="st">      </span><span class="kw">count</span>(Agency, <span class="dt">sort =</span> <span class="ot">TRUE</span>))</code></pre></div>
 <pre><code>## Source: local data frame [64 x 2]
 ## 
 ##    Agency       n
@@ -840,9 +807,8 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 14.76 | system:  2.02 | elapsed: 16.88</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  count(Agency, sort = TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">count</span>(Agency, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: &lt;derived table&gt; [?? x 2]
 ## Arrange: desc(n) 
@@ -865,11 +831,10 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 14.76 | system:  1.97 | elapsed: 16.83</pre>
-
-<pre class="r"><code>dbGetQuery(db, &#39;SELECT Agency, COUNT(*) as `num_complaints`
-                FROM data 
-                GROUP BY Agency
-                ORDER BY -num_complaints&#39;) %&gt;% head</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&#39;SELECT Agency, COUNT(*) as `num_complaints`</span>
+<span class="st">                FROM data </span>
+<span class="st">                GROUP BY Agency</span>
+<span class="st">                ORDER BY -num_complaints&#39;</span>) %&gt;%<span class="st"> </span>head</code></pre></div>
 <pre><code>##   Agency num_complaints
 ## 1    HPD        3316474
 ## 2    DOT        1599851
@@ -883,12 +848,11 @@ head(distinct_city)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.005 | system: 0.000 | elapsed: 0.005</pre>
-
-<pre class="r"><code>## A help function, to adjust the plot order.
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## A help function, to adjust the plot order.
 ## Created a ordered factor, with levels the same as input order.
-ordered_asis &lt;- function(x) {
-    ordered(x, levels = x)
-}</code></pre>
+ordered_asis &lt;-<span class="st"> </span>function(x) {
+    <span class="kw">ordered</span>(x, <span class="dt">levels =</span> x)
+}</code></pre></div>
 </div>
 <p>I prefer dot plots instead of bar plots here, since it is easier to read when the columns are dense.</p>
 <div class="code_chunk">
@@ -896,12 +860,14 @@ ordered_asis &lt;- function(x) {
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(163, 152, 86)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(163, 152, 86)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(163, 152, 86)); /* Standard syntax; must be last */">user: 0.523 | system: 0.053 | elapsed: 0.606</pre>
-
-<pre class="r"><code>ggplot(complaints_by_agency, aes(x = ordered_asis(Agency), y = n)) +
-  xlab(&quot;Agency&quot;) + ylab(&quot;Number of Complaints&quot;) +
-  geom_point(color = &quot;#01AFE1&quot; ) + scale_y_log10(labels = comma_format()) +
-theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(complaints_by_agency, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">ordered_asis</span>(Agency), <span class="dt">y =</span> n)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Agency&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Number of Complaints&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span> ) +<span class="st"> </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
+<span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>))</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
+<p class="caption">plot of chunk plot_complaints_by_agency</p>
+</div>
 </div>
 <h1 id="most-common-complaint">Most common complaint</h1>
 <div class="code_chunk">
@@ -909,9 +875,8 @@ theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></p
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(148, 177, 100)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(148, 177, 100)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(148, 177, 100)); /* Standard syntax; must be last */">user: 0.331 | system: 0.041 | elapsed: 0.373</pre>
-
-<pre class="r"><code>(complaints_by_type &lt;- service %&gt;%
-   count(ComplaintType, sort = TRUE))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(complaints_by_type &lt;-<span class="st"> </span>service %&gt;%
+<span class="st">   </span><span class="kw">count</span>(ComplaintType, <span class="dt">sort =</span> <span class="ot">TRUE</span>))</code></pre></div>
 <pre><code>## Source: local data frame [245 x 2]
 ## 
 ##             ComplaintType      n
@@ -932,9 +897,8 @@ theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></p
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 16.86 | system:  2.79 | elapsed: 19.74</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  count(ComplaintType, sort = TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">count</span>(ComplaintType, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Source: sqlite 3.8.6 [noshare/service.sqlite]
 ## From: &lt;derived table&gt; [?? x 2]
 ## Arrange: desc(n) 
@@ -957,12 +921,11 @@ theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></p
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(144, 183, 103)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(144, 183, 103)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(144, 183, 103)); /* Standard syntax; must be last */">user: 0.289 | system: 0.032 | elapsed: 0.321</pre>
-
-<pre class="r"><code>## Another method to count
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Another method to count
 service %&gt;%
-  group_by(ComplaintType) %&gt;%
-  summarise(n = n()) %&gt;%
-  arrange(desc(n))</code></pre>
+<span class="st">  </span><span class="kw">group_by</span>(ComplaintType) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(n))</code></pre></div>
 <pre><code>## Source: local data frame [245 x 2]
 ## 
 ##             ComplaintType      n
@@ -984,14 +947,16 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(160, 158, 89)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(160, 158, 89)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(160, 158, 89)); /* Standard syntax; must be last */">user: 0.477 | system: 0.045 | elapsed: 0.555</pre>
-
-<pre class="r"><code>ggplot(head(complaints_by_type, 40),
-       aes(x = ordered_asis(ComplaintType), y = n)) +
-  geom_point(color = &quot;#01AFE1&quot;) +
-  xlab(&quot;&quot;) + ylab(&quot;Number of Complaints&quot;) +
-  scale_y_continuous(labels = comma_format()) +
-  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">head</span>(complaints_by_type, <span class="dv">40</span>),
+       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">ordered_asis</span>(ComplaintType), <span class="dt">y =</span> n)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Number of Complaints&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>))</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
+<p class="caption">plot of chunk plot_complaints_by_type</p>
+</div>
 </div>
 <h1 id="the-most-common-complaint-in-each-city">The most common complaint in each city</h1>
 <div class="code_chunk">
@@ -999,10 +964,9 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 3.845 | system: 0.136 | elapsed: 4.034</pre>
-
-<pre class="r"><code>(complaints_by_city &lt;- service %&gt;%
-   count(City = toupper(City), sort = TRUE) %&gt;%
-   filter(City != &quot;&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(complaints_by_city &lt;-<span class="st"> </span>service %&gt;%
+<span class="st">   </span><span class="kw">count</span>(<span class="dt">City =</span> <span class="kw">toupper</span>(City), <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">   </span><span class="kw">filter</span>(City !=<span class="st"> &quot;&quot;</span>))</code></pre></div>
 <pre><code>## Source: local data frame [1,771 x 2]
 ## 
 ##             City       n
@@ -1023,17 +987,16 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.009 | system: 0.001 | elapsed: 0.010</pre>
-
-<pre class="r"><code>type_ordered &lt;- ordered_asis(complaints_by_type$ComplaintType)
-city_ordered &lt;- ordered_asis(complaints_by_city$City)
-type_top &lt;- type_ordered[1:20]
-city_top &lt;- city_ordered[1:20]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">type_ordered &lt;-<span class="st"> </span><span class="kw">ordered_asis</span>(complaints_by_type$ComplaintType)
+city_ordered &lt;-<span class="st"> </span><span class="kw">ordered_asis</span>(complaints_by_city$City)
+type_top &lt;-<span class="st"> </span>type_ordered[<span class="dv">1</span>:<span class="dv">20</span>]
+city_top &lt;-<span class="st"> </span>city_ordered[<span class="dv">1</span>:<span class="dv">20</span>]</code></pre></div>
 </div>
 <div class="code_chunk">
-<pre class="r"><code>(complaints_city_type &lt;- service %&gt;%
-   filter(City %in% city_top, ComplaintType %in% type_top) %&gt;%
-   mutate(City = factor(City, city_top), ComplaintType = factor(ComplaintType, type_top)) %&gt;%
-   count(City, ComplaintType))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(complaints_city_type &lt;-<span class="st"> </span>service %&gt;%
+<span class="st">   </span><span class="kw">filter</span>(City %in%<span class="st"> </span>city_top, ComplaintType %in%<span class="st"> </span>type_top) %&gt;%
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">City =</span> <span class="kw">factor</span>(City, city_top), <span class="dt">ComplaintType =</span> <span class="kw">factor</span>(ComplaintType, type_top)) %&gt;%
+<span class="st">   </span><span class="kw">count</span>(City, ComplaintType))</code></pre></div>
 <pre><code>## Source: local data frame [384 x 3]
 ## Groups: City
 ## 
@@ -1055,29 +1018,33 @@ city_top &lt;- city_ordered[1:20]</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(186, 113, 64)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(186, 113, 64)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(186, 113, 64)); /* Standard syntax; must be last */">user: 0.833 | system: 0.094 | elapsed: 0.960</pre>
-
-<pre class="r"><code>ggplot(complaints_city_type,
-       aes(x = ComplaintType, y = n, fill = City, order =-as.numeric(City))) +
-  geom_bar(stat = &quot;identity&quot;) +
-  xlab(NULL) + scale_y_continuous(labels = comma_format()) +
-  scale_fill_discrete(h = c(0, 360 * 7)) +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
-        legend.key.size = unit(14, &quot;points&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(complaints_city_type,
+       <span class="kw">aes</span>(<span class="dt">x =</span> ComplaintType, <span class="dt">y =</span> n, <span class="dt">fill =</span> City, <span class="dt">order =</span>-<span class="kw">as.numeric</span>(City))) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>) +<span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
+<span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span> *<span class="st"> </span><span class="dv">7</span>)) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="dv">1</span>),
+        <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>))</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
+<p class="caption">plot of chunk plot_complaints_city_type</p>
+</div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(182, 121, 68)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(182, 121, 68)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(182, 121, 68)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(182, 121, 68)); /* Standard syntax; must be last */">user: 0.803 | system: 0.056 | elapsed: 0.888</pre>
-
-<pre class="r"><code>ggplot(complaints_city_type,
-       aes(x = City, y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
-  geom_bar(stat = &quot;identity&quot;) + scale_fill_discrete(h = c(0, 360 * 7)) +
-  xlab(NULL) +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
-        legend.key.size = unit(14, &quot;points&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(complaints_city_type,
+       <span class="kw">aes</span>(<span class="dt">x =</span> City, <span class="dt">y =</span> n, <span class="dt">fill =</span> ComplaintType, <span class="dt">order =</span> -<span class="kw">as.numeric</span>(ComplaintType))) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +<span class="st"> </span><span class="kw">scale_fill_discrete</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span> *<span class="st"> </span><span class="dv">7</span>)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="dv">1</span>),
+        <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>))</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
+<p class="caption">plot of chunk plot_complaints_type_city</p>
+</div>
 </div>
 And if we are more interested in proportion of complaint type for each city.
 <div class="code_chunk">
@@ -1085,15 +1052,17 @@ And if we are more interested in proportion of complaint type for each city.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(187, 112, 63)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(187, 112, 63)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(187, 112, 63)); /* Standard syntax; must be last */">user: 0.862 | system: 0.070 | elapsed: 0.974</pre>
-
-<pre class="r"><code>ggplot(arrange(complaints_city_type, City, ComplaintType),
-       aes(x = City, y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
-  geom_bar(stat = &quot;identity&quot;, position = &quot;fill&quot;) + scale_fill_discrete(h = c(0, 360 * 7)) +
-  xlab(NULL) +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0, vjust = 1),
-        legend.key.size = unit(14, &quot;points&quot;),
-        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">arrange</span>(complaints_city_type, City, ComplaintType),
+       <span class="kw">aes</span>(<span class="dt">x =</span> City, <span class="dt">y =</span> n, <span class="dt">fill =</span> ComplaintType, <span class="dt">order =</span> -<span class="kw">as.numeric</span>(ComplaintType))) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) +<span class="st"> </span><span class="kw">scale_fill_discrete</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span> *<span class="st"> </span><span class="dv">7</span>)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="dv">1</span>),
+        <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>),
+        <span class="dt">panel.grid.major.y =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.grid.minor.y =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
+<p class="caption">plot of chunk plot_complaints_type_city_fill</p>
+</div>
 </div>
 <h1 id="filter-rows-with-time-stamp-strings">Filter rows with time stamp strings</h1>
 <div class="code_chunk">
@@ -1101,11 +1070,10 @@ And if we are more interested in proportion of complaint type for each city.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 5.801 | system: 0.083 | elapsed: 5.922</pre>
-
-<pre class="r"><code>service %&gt;%
-  filter(CreatedDate &lt; &quot;2014-11-16 23:47:00&quot;,
-         CreatedDate &gt; &quot;2014-11-16 23:45:00&quot;) %&gt;%
-  select(ComplaintType, CreatedDate, City)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(CreatedDate &lt;<span class="st"> &quot;2014-11-16 23:47:00&quot;</span>,
+         CreatedDate &gt;<span class="st"> &quot;2014-11-16 23:45:00&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, CreatedDate, City)</code></pre></div>
 <pre><code>## Source: local data frame [7 x 3]
 ## 
 ##              ComplaintType         CreatedDate      City
@@ -1122,12 +1090,11 @@ And if we are more interested in proportion of complaint type for each city.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 2.058 | system: 0.977 | elapsed: 3.050</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(ComplaintType, CreatedDate, City) %&gt;%
-  filter(CreatedDate &lt; &quot;2014-11-16 23:47:00&quot;,
-         CreatedDate &gt; &quot;2014-11-16 23:45:00&quot;) %&gt;%
-  explain_and_eval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(ComplaintType, CreatedDate, City) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(CreatedDate &lt;<span class="st"> &quot;2014-11-16 23:47:00&quot;</span>,
+         CreatedDate &gt;<span class="st"> &quot;2014-11-16 23:45:00&quot;</span>) %&gt;%
+<span class="st">  </span>explain_and_eval</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;ComplaintType&quot; AS &quot;ComplaintType&quot;, &quot;CreatedDate&quot; AS &quot;CreatedDate&quot;, &quot;City&quot; AS &quot;City&quot;
 ## FROM &quot;data&quot;
@@ -1157,11 +1124,10 @@ And if we are more interested in proportion of complaint type for each city.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 1.899 | system: 0.903 | elapsed: 2.811</pre>
-
-<pre class="r"><code>dbGetQuery(db, &quot;SELECT ComplaintType, CreatedDate, City
-                FROM data 
-                WHERE CreatedDate &lt; &#39;2014-11-16 23:47:00&#39; 
-                AND CreatedDate &gt; &#39;2014-11-16 23:45:00&#39;&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&quot;SELECT ComplaintType, CreatedDate, City</span>
+<span class="st">                FROM data </span>
+<span class="st">                WHERE CreatedDate &lt; &#39;2014-11-16 23:47:00&#39; </span>
+<span class="st">                AND CreatedDate &gt; &#39;2014-11-16 23:45:00&#39;&quot;</span>)</code></pre></div>
 <pre><code>##              ComplaintType         CreatedDate      City
 ## 1         Derelict Vehicle 2014-11-16 23:46:57 RIDGEWOOD
 ## 2       Noise - Commercial 2014-11-16 23:46:08   ASTORIA
@@ -1177,13 +1143,12 @@ And if we are more interested in proportion of complaint type for each city.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 2.832 | system: 0.968 | elapsed: 3.819</pre>
-
-<pre class="r"><code>## `strftime` in R is too slow. Demonstrate its usage with the first
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## `strftime` in R is too slow. Demonstrate its usage with the first
 ## 100,000 rows of the total over 9,000,000 rows.
 service %&gt;%
-  slice(1:100000) %&gt;%
-  select(CreatedDate, ComplaintType) %&gt;%
-  mutate(hour = strftime(CreatedDate, &quot;%H&quot;))</code></pre>
+<span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span>:<span class="dv">100000</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, ComplaintType) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">strftime</span>(CreatedDate, <span class="st">&quot;%H&quot;</span>))</code></pre></div>
 <pre><code>## Source: local data frame [100,000 x 3]
 ## 
 ##            CreatedDate              ComplaintType hour
@@ -1204,12 +1169,11 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(125, 214, 121)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(125, 214, 121)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(125, 214, 121)); /* Standard syntax; must be last */">user: 0.026 | system: 0.004 | elapsed: 0.037</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(CreatedDate, ComplaintType) %&gt;%
-  mutate(hour = strftime(&quot;%H&quot;, CreatedDate)) %&gt;%
-  explain_and_eval %&gt;%
-  head(5)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, ComplaintType) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">strftime</span>(<span class="st">&quot;%H&quot;</span>, CreatedDate)) %&gt;%
+<span class="st">  </span>explain_and_eval %&gt;%
+<span class="st">  </span><span class="kw">head</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;CreatedDate&quot; AS &quot;CreatedDate&quot;, &quot;ComplaintType&quot; AS &quot;ComplaintType&quot;, STRFTIME(&#39;%H&#39;, &quot;CreatedDate&quot;) AS &quot;hour&quot;
 ## FROM &quot;data&quot;
@@ -1232,11 +1196,10 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 10.8 | system:  1.9 | elapsed: 12.8</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  select(CreatedDate, ComplaintType) %&gt;%
-  mutate(hour = strftime(&quot;%H&quot;, CreatedDate)) %&gt;%
-  collect</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, ComplaintType) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">strftime</span>(<span class="st">&quot;%H&quot;</span>, CreatedDate)) %&gt;%
+<span class="st">  </span>collect</code></pre></div>
 <pre><code>## Source: local data frame [9,115,505 x 3]
 ## 
 ##            CreatedDate              ComplaintType hour
@@ -1257,12 +1220,11 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.006 | system: 0.000 | elapsed: 0.006</pre>
-
-<pre class="r"><code>dbGetQuery(db, &quot;SELECT CreatedDate, 
-               strftime(&#39;%H&#39;, CreatedDate) as hour, 
-               ComplaintType 
-               FROM data 
-               LIMIT 5&quot; )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&quot;SELECT CreatedDate, </span>
+<span class="st">               strftime(&#39;%H&#39;, CreatedDate) as hour, </span>
+<span class="st">               ComplaintType </span>
+<span class="st">               FROM data </span>
+<span class="st">               LIMIT 5&quot;</span> )</code></pre></div>
 <pre><code>##           CreatedDate hour            ComplaintType
 ## 1 2015-04-12 02:41:17   02         Street Condition
 ## 2 2015-04-12 02:08:53   02 Benefit Card Replacement
@@ -1276,19 +1238,17 @@ service %&gt;%
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(123, 217, 123)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(123, 217, 123)); /* Standard syntax; must be last */">user: 0.005 | system: 0.001 | elapsed: 0.005</pre>
-
-<pre class="r"><code>## function to pull out hour unit quickly.
-get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## function to pull out hour unit quickly.
+get_hour &lt;-<span class="st"> </span>function(x) <span class="kw">substr</span>(x, <span class="dv">12</span>, <span class="dv">13</span>)</code></pre></div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(205, 82, 46)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(205, 82, 46)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(205, 82, 46)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(205, 82, 46)); /* Standard syntax; must be last */">user: 1.138 | system: 0.105 | elapsed: 1.245</pre>
-
-<pre class="r"><code>(hour_count &lt;- service %&gt;%
-   mutate(hour = get_hour(CreatedDate)) %&gt;%
-   count(hour))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(hour_count &lt;-<span class="st"> </span>service %&gt;%
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">get_hour</span>(CreatedDate)) %&gt;%
+<span class="st">   </span><span class="kw">count</span>(hour))</code></pre></div>
 <pre><code>## Source: local data frame [24 x 2]
 ## 
 ##    hour       n
@@ -1309,11 +1269,10 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 15.94 | system:  3.32 | elapsed: 19.38</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  mutate(hour = strftime(&#39;%H&#39;, CreatedDate)) %&gt;%
-  count(hour) %&gt;%
-  explain_and_eval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">strftime</span>(<span class="st">&#39;%H&#39;</span>, CreatedDate)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(hour) %&gt;%
+<span class="st">  </span>explain_and_eval</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;hour&quot;, &quot;n&quot;
 ## FROM (SELECT &quot;hour&quot;, COUNT() AS &quot;n&quot;
@@ -1348,12 +1307,11 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 17.78 | system:  3.45 | elapsed: 21.36</pre>
-
-<pre class="r"><code>dbGetQuery(db, &quot;SELECT CreatedDate, 
-               strftime(&#39;%H&#39;, CreatedDate) as hour, 
-               count(*) as `Complaints per Hour`
-               FROM data
-               GROUP BY hour&quot; )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&quot;SELECT CreatedDate, </span>
+<span class="st">               strftime(&#39;%H&#39;, CreatedDate) as hour, </span>
+<span class="st">               count(*) as `Complaints per Hour`</span>
+<span class="st">               FROM data</span>
+<span class="st">               GROUP BY hour&quot;</span> )</code></pre></div>
 <pre><code>##            CreatedDate hour Complaints per Hour
 ## 1  2003-02-26 00:47:27   00             3535345
 ## 2  2003-02-26 01:36:31   01               79480
@@ -1385,10 +1343,12 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(152, 170, 96)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(152, 170, 96)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(152, 170, 96)); /* Standard syntax; must be last */">user: 0.398 | system: 0.036 | elapsed: 0.440</pre>
-
-<pre class="r"><code>ggplot(hour_count, aes(x = hour, y = n)) +
-  geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(hour_count, <span class="kw">aes</span>(<span class="dt">x =</span> hour, <span class="dt">y =</span> n)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
+<p class="caption">plot of chunk plot_complaint_by_hour_large_0</p>
+</div>
 </div>
 <p>The count of hour 0 is unusually large. Let’s check their values.</p>
 <div class="code_chunk">
@@ -1396,11 +1356,10 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(221, 55, 31)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(221, 55, 31)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(221, 55, 31)); /* Standard syntax; must be last */">user: 1.364 | system: 0.094 | elapsed: 1.492</pre>
-
-<pre class="r"><code>service %&gt;%
-  mutate(hour = get_hour(CreatedDate)) %&gt;%
-  filter(hour == &quot;00&quot;) %&gt;%
-  select(CreatedDate, ClosedDate, hour)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">get_hour</span>(CreatedDate)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(hour ==<span class="st"> &quot;00&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, ClosedDate, hour)</code></pre></div>
 <pre><code>## Source: local data frame [3,535,345 x 3]
 ## 
 ##            CreatedDate          ClosedDate hour
@@ -1422,13 +1381,12 @@ get_hour &lt;- function(x) substr(x, 12, 13)</code></pre>
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(214, 67, 38)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(214, 67, 38)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(214, 67, 38)); /* Standard syntax; must be last */">user: 1.301 | system: 0.081 | elapsed: 1.385</pre>
-
-<pre class="r"><code>set.seed(2015)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2015</span>)
 service %&gt;%
-  mutate(hour = get_hour(CreatedDate)) %&gt;%
-  filter(hour == &quot;00&quot;) %&gt;%
-  select(CreatedDate, ClosedDate, hour) %&gt;%
-  sample_n(25)</code></pre>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">get_hour</span>(CreatedDate)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(hour ==<span class="st"> &quot;00&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, ClosedDate, hour) %&gt;%
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">25</span>)</code></pre></div>
 <pre><code>## Source: local data frame [25 x 3]
 ## 
 ##            CreatedDate          ClosedDate hour
@@ -1450,33 +1408,33 @@ Those “00:00:00” must mean NA.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 5.405 | system: 0.524 | elapsed: 6.064</pre>
-
-<pre class="r"><code>service_fix_00 &lt;- service %&gt;%
-  mutate(hour =
-           ifelse(substring(CreatedDate, 12) == &quot;00:00:00&quot;,
-                  NA,
-                  get_hour(CreatedDate)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_fix_00 &lt;-<span class="st"> </span>service %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span>
+           <span class="kw">ifelse</span>(<span class="kw">substring</span>(CreatedDate, <span class="dv">12</span>) ==<span class="st"> &quot;00:00:00&quot;</span>,
+                  <span class="ot">NA</span>,
+                  <span class="kw">get_hour</span>(CreatedDate)))</code></pre></div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(159, 159, 90)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(159, 159, 90)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(159, 159, 90)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(159, 159, 90)); /* Standard syntax; must be last */">user: 0.386 | system: 0.113 | elapsed: 0.544</pre>
-
-<pre class="r"><code>hour_count_fix_00 &lt;-
-    service_fix_00 %&gt;%
-      count(hour)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hour_count_fix_00 &lt;-
+<span class="st">    </span>service_fix_00 %&gt;%
+<span class="st">      </span><span class="kw">count</span>(hour)</code></pre></div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(162, 153, 86)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(162, 153, 86)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(162, 153, 86)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(162, 153, 86)); /* Standard syntax; must be last */">user: 0.501 | system: 0.057 | elapsed: 0.596</pre>
-
-<pre class="r"><code>ggplot(na.omit(hour_count_fix_00),
-       aes(x = hour, y = n)) +
-  geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">na.omit</span>(hour_count_fix_00),
+       <span class="kw">aes</span>(<span class="dt">x =</span> hour, <span class="dt">y =</span> n)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
+<p class="caption">plot of chunk plot_complaint_by_hour</p>
+</div>
 </div>
 <h1 id="filter-noise-complaints-by-hour">Filter noise complaints by hour</h1>
 <div class="code_chunk">
@@ -1484,11 +1442,10 @@ Those “00:00:00” must mean NA.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 8.111 | system: 0.467 | elapsed: 8.614</pre>
-
-<pre class="r"><code>(noise_hour_count &lt;- 
-    service_fix_00 %&gt;%
-      filter(grepl(&quot;.*Noise.*&quot;, ComplaintType, ignore.case = TRUE)) %&gt;%
-      count(hour))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(noise_hour_count &lt;-<span class="st"> </span>
+<span class="st">    </span>service_fix_00 %&gt;%
+<span class="st">      </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;.*Noise.*&quot;</span>, ComplaintType, <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>)) %&gt;%
+<span class="st">      </span><span class="kw">count</span>(hour))</code></pre></div>
 <pre><code>## Source: local data frame [25 x 2]
 ## 
 ##    hour     n
@@ -1509,12 +1466,11 @@ Those “00:00:00” must mean NA.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 3.65 | system: 1.08 | elapsed: 4.78</pre>
-
-<pre class="r"><code>service_db %&gt;%
-  filter(ComplaintType %LIKE% &quot;%Noise%&quot;) %&gt;%
-  mutate(hour = strftime(&#39;%H&#39;, CreatedDate)) %&gt;%
-  count(hour) %&gt;%
-  explain_and_eval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_db %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(ComplaintType %LIKE%<span class="st"> &quot;%Noise%&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hour =</span> <span class="kw">strftime</span>(<span class="st">&#39;%H&#39;</span>, CreatedDate)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(hour) %&gt;%
+<span class="st">  </span>explain_and_eval</code></pre></div>
 <pre><code>## &lt;SQL&gt;
 ## SELECT &quot;hour&quot;, &quot;n&quot;
 ## FROM (SELECT &quot;hour&quot;, COUNT() AS &quot;n&quot;
@@ -1550,14 +1506,13 @@ Those “00:00:00” must mean NA.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 3.81 | system: 1.06 | elapsed: 4.90</pre>
-
-<pre class="r"><code>dbGetQuery(db, &quot;SELECT 
-               strftime(&#39;%H&#39;, CreatedDate) as hour, 
-               count(*) as `Complaints per Hour`
-               FROM data
-               WHERE ComplaintType LIKE &#39;%Noise%&#39;
-               AND NOT CreatedDate LIKE &#39;% 00:00:00&#39;
-               GROUP BY hour&quot; )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbGetQuery</span>(db, <span class="st">&quot;SELECT </span>
+<span class="st">               strftime(&#39;%H&#39;, CreatedDate) as hour, </span>
+<span class="st">               count(*) as `Complaints per Hour`</span>
+<span class="st">               FROM data</span>
+<span class="st">               WHERE ComplaintType LIKE &#39;%Noise%&#39;</span>
+<span class="st">               AND NOT CreatedDate LIKE &#39;% 00:00:00&#39;</span>
+<span class="st">               GROUP BY hour&quot;</span> )</code></pre></div>
 <pre><code>##    hour Complaints per Hour
 ## 1    00               47414
 ## 2    01               39384
@@ -1589,12 +1544,14 @@ Those “00:00:00” must mean NA.
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(162, 153, 86)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(162, 153, 86)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(162, 153, 86)); /* Standard syntax; must be last */">user: 0.545 | system: 0.043 | elapsed: 0.595</pre>
-
-<pre class="r"><code>ggplot(noise_hour_count,
-       aes(x = hour, y = n)) +
-  ylab(&quot;Number of complaints&quot;) + scale_y_continuous(labels = comma_format()) +
-  geom_bar(stat = &quot;identity&quot;, color = &quot;#01AFE1&quot;, fill = &quot;#01AFE1&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(noise_hour_count,
+       <span class="kw">aes</span>(<span class="dt">x =</span> hour, <span class="dt">y =</span> n)) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Number of complaints&quot;</span>) +<span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
+<p class="caption">plot of chunk plot_noise_hour</p>
+</div>
 </div>
 <h1 id="segregate-complaints-by-hour">Segregate complaints by hour</h1>
 Count complatins by 15 minute interval
@@ -1603,12 +1560,11 @@ Count complatins by 15 minute interval
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(165, 148, 84)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(165, 148, 84)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(165, 148, 84)); /* Standard syntax; must be last */">user: 0.590 | system: 0.038 | elapsed: 0.640</pre>
-
-<pre class="r"><code>(complaints_type_hour &lt;- 
-    service_fix_00 %&gt;%
-      count(ComplaintType, hour) %&gt;%
-      filter(ComplaintType %in% type_top) %&gt;%
-      mutate(factor(ComplaintType, type_top)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(complaints_type_hour &lt;-<span class="st"> </span>
+<span class="st">    </span>service_fix_00 %&gt;%
+<span class="st">      </span><span class="kw">count</span>(ComplaintType, hour) %&gt;%
+<span class="st">      </span><span class="kw">filter</span>(ComplaintType %in%<span class="st"> </span>type_top) %&gt;%
+<span class="st">      </span><span class="kw">mutate</span>(<span class="kw">factor</span>(ComplaintType, type_top)))</code></pre></div>
 <pre><code>## Source: local data frame [329 x 4]
 ## Groups: ComplaintType
 ## 
@@ -1630,15 +1586,17 @@ Count complatins by 15 minute interval
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(170, 141, 79)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(170, 141, 79)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(170, 141, 79)); /* Standard syntax; must be last */">user: 0.637 | system: 0.068 | elapsed: 0.711</pre>
-
-<pre class="r"><code>ggplot(na.omit(complaints_type_hour),
-       aes(x = as.numeric(hour), y = n, fill = ComplaintType, order = -as.numeric(ComplaintType))) +
-  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
-  ylab(&quot;Number of complaints&quot;) +
-  scale_fill_discrete(h = c(0, 360 * 5 )) +
-  scale_y_continuous(labels = comma_format()) +
-  xlab(NULL)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">na.omit</span>(complaints_type_hour),
+       <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.numeric</span>(hour), <span class="dt">y =</span> n, <span class="dt">fill =</span> ComplaintType, <span class="dt">order =</span> -<span class="kw">as.numeric</span>(ComplaintType))) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;stack&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Number of complaints&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span> *<span class="st"> </span><span class="dv">5</span> )) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>)</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
+<p class="caption">plot of chunk plot_hour_type</p>
+</div>
 </div>
 <h1 id="complaints-per-15-minute-interval">Complaints per 15 minute interval</h1>
 <div class="code_chunk">
@@ -1646,27 +1604,25 @@ Count complatins by 15 minute interval
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 5.624 | system: 0.209 | elapsed: 5.850</pre>
-
-<pre class="r"><code>get_interval &lt;- function(datetime) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">get_interval &lt;-<span class="st"> </span>function(datetime) {
     minute_interval &lt;-
-        floor(as.numeric(substr(datetime, 15, 16)) / 15) * 15
-    paste(substr(datetime, 12, 13),   #hour
-          sprintf(&quot;%02i&quot;, minute_interval), sep = &quot;:&quot;)
+<span class="st">        </span><span class="kw">floor</span>(<span class="kw">as.numeric</span>(<span class="kw">substr</span>(datetime, <span class="dv">15</span>, <span class="dv">16</span>)) /<span class="st"> </span><span class="dv">15</span>) *<span class="st"> </span><span class="dv">15</span>
+    <span class="kw">paste</span>(<span class="kw">substr</span>(datetime, <span class="dv">12</span>, <span class="dv">13</span>),   <span class="co">#hour</span>
+          <span class="kw">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, minute_interval), <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>)
 }
-service_interval &lt;- 
-    service_fix_00 %&gt;%
-      filter(!is.na(hour)) %&gt;%
-      mutate(day = substr(CreatedDate, 1, 10),
-             interval = get_interval(CreatedDate))</code></pre>
+service_interval &lt;-<span class="st"> </span>
+<span class="st">    </span>service_fix_00 %&gt;%
+<span class="st">      </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(hour)) %&gt;%
+<span class="st">      </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">substr</span>(CreatedDate, <span class="dv">1</span>, <span class="dv">10</span>),
+             <span class="dt">interval =</span> <span class="kw">get_interval</span>(CreatedDate))</code></pre></div>
 </div>
 <div class="code_chunk">
 <pre class = time style="background-image: -webkit-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.009 | system: 0.002 | elapsed: 0.011</pre>
-
-<pre class="r"><code>service_interval %&gt;%
-  select(CreatedDate, day, interval)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_interval %&gt;%
+<span class="st">  </span><span class="kw">select</span>(CreatedDate, day, interval)</code></pre></div>
 <pre><code>## Source: local data frame [5,681,233 x 3]
 ## 
 ##            CreatedDate        day interval
@@ -1688,21 +1644,23 @@ service_interval &lt;-
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(255, 0, 0)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(255, 0, 0)); /* Standard syntax; must be last */">user: 4.033 | system: 0.098 | elapsed: 4.167</pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">service_interval_count &lt;-<span class="st"> </span>
+<span class="st">    </span>service_interval %&gt;%
+<span class="st">      </span><span class="kw">filter</span>(day &gt;=<span class="st"> &quot;2015-01-01&quot;</span>, day &lt;=<span class="st"> &quot;2015-03-31&quot;</span>) %&gt;%
+<span class="st">      </span><span class="kw">count</span>(day, interval) %&gt;%<span class="st"> </span>ungroup %&gt;%
+<span class="st">      </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">as.Date</span>(day))
 
-<pre class="r"><code>service_interval_count &lt;- 
-    service_interval %&gt;%
-      filter(day &gt;= &quot;2015-01-01&quot;, day &lt;= &quot;2015-03-31&quot;) %&gt;%
-      count(day, interval) %&gt;% ungroup %&gt;%
-      mutate(day = as.Date(day))
-
-ggplot(service_interval_count,
-       aes(as.Date(day), as.POSIXlt(interval, format = &quot;%H:%M&quot;), fill = n)) +
-  geom_tile() + scale_fill_gradient(low=&quot;green&quot;, high=&quot;red&quot;) +
-  scale_y_datetime(breaks = date_breaks(&quot;2 hour&quot;),
-                   labels = date_format(&quot;%H:%M&quot;)) +
-  xlab(&quot;Date&quot;) + ylab(&quot;Time Interval&quot;) +
-  theme(panel.grid = element_blank())</code></pre>
+<span class="kw">ggplot</span>(service_interval_count,
+       <span class="kw">aes</span>(<span class="kw">as.Date</span>(day), <span class="kw">as.POSIXlt</span>(interval, <span class="dt">format =</span> <span class="st">&quot;%H:%M&quot;</span>), <span class="dt">fill =</span> n)) +
+<span class="st">  </span><span class="kw">geom_tile</span>() +<span class="st"> </span><span class="kw">scale_fill_gradient</span>(<span class="dt">low=</span><span class="st">&quot;green&quot;</span>, <span class="dt">high=</span><span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_datetime</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;2 hour&quot;</span>),
+                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%H:%M&quot;</span>)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Time Interval&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
+<p class="caption">plot of chunk plot_interval_heatmap</p>
+</div>
 </div>
 <p>The above plot is misleading. The white spots represent missing data, while missing from count table actually means 0, which should be colored as green.</p>
 <div class="code_chunk">
@@ -1710,18 +1668,17 @@ ggplot(service_interval_count,
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(124, 217, 122)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(124, 217, 122)); /* Standard syntax; must be last */">user: 0.009 | system: 0.001 | elapsed: 0.010</pre>
-
-<pre class="r"><code>(default_count &lt;-
-    local({
-        day &lt;- seq(as.Date(&quot;2015-01-01&quot;), as.Date(&quot;2015-03-31&quot;), 1)
-        interval &lt;- paste(rep(sprintf(&quot;%02i&quot;, 0:23), each = 4),
-                          c(&quot;00&quot;, &quot;15&quot;, &quot;30&quot;, &quot;45&quot;),
-                          sep = &quot;:&quot;)
-        as.tbl(data.frame(day = rep(day, each = length(interval)),
-                          interval = interval,
-                          default = 0,
-                          stringsAsFactors = FALSE))
-    }))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(default_count &lt;-
+<span class="st">    </span><span class="kw">local</span>({
+        day &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2015-01-01&quot;</span>), <span class="kw">as.Date</span>(<span class="st">&quot;2015-03-31&quot;</span>), <span class="dv">1</span>)
+        interval &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">rep</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, <span class="dv">0</span>:<span class="dv">23</span>), <span class="dt">each =</span> <span class="dv">4</span>),
+                          <span class="kw">c</span>(<span class="st">&quot;00&quot;</span>, <span class="st">&quot;15&quot;</span>, <span class="st">&quot;30&quot;</span>, <span class="st">&quot;45&quot;</span>),
+                          <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>)
+        <span class="kw">as.tbl</span>(<span class="kw">data.frame</span>(<span class="dt">day =</span> <span class="kw">rep</span>(day, <span class="dt">each =</span> <span class="kw">length</span>(interval)),
+                          <span class="dt">interval =</span> interval,
+                          <span class="dt">default =</span> <span class="dv">0</span>,
+                          <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>))
+    }))</code></pre></div>
 <pre><code>## Source: local data frame [8,640 x 3]
 ## 
 ##           day interval default
@@ -1742,11 +1699,10 @@ ggplot(service_interval_count,
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(136, 197, 111)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(136, 197, 111)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(136, 197, 111)); /* Standard syntax; must be last */">user: 0.186 | system: 0.003 | elapsed: 0.190</pre>
-
-<pre class="r"><code>(service_interval_count_full &lt;- 
-    service_interval_count %&gt;%
-      full_join(default_count) %&gt;%
-      mutate(n = ifelse(is.na(n), default, n)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(service_interval_count_full &lt;-<span class="st"> </span>
+<span class="st">    </span>service_interval_count %&gt;%
+<span class="st">      </span><span class="kw">full_join</span>(default_count) %&gt;%
+<span class="st">      </span><span class="kw">mutate</span>(<span class="dt">n =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(n), default, n)))</code></pre></div>
 <pre><code>## Joining by: c(&quot;day&quot;, &quot;interval&quot;)</code></pre>
 <pre><code>## Source: local data frame [8,640 x 4]
 ## 
@@ -1769,20 +1725,22 @@ ggplot(service_interval_count,
   background-image:    -moz-linear-gradient(left, rgb(123, 218, 123), rgb(188, 110, 62)); /* For Firefox (3.6 to 15) */
   background-image:      -o-linear-gradient(left, rgb(123, 218, 123), rgb(188, 110, 62)); /* For old Opera (11.1 to 12.0) */ 
   background-image:         linear-gradient(to right, rgb(123, 218, 123), rgb(188, 110, 62)); /* Standard syntax; must be last */">user: 0.929 | system: 0.046 | elapsed: 0.989</pre>
-
-<pre class="r"><code>ggplot(service_interval_count_full,
-       aes(as.Date(day), as.POSIXlt(interval, format = &quot;%H:%M&quot;), fill = n)) +
-  geom_tile() + scale_fill_gradient(low=&quot;green&quot;, high=&quot;red&quot;) +
-  scale_y_datetime(breaks = date_breaks(&quot;2 hour&quot;),
-                   labels = date_format(&quot;%H:%M&quot;)) +
-  xlab(&quot;Date&quot;) + ylab(&quot;15 Minutes Time Interval&quot;) +
-  theme(panel.grid = element_blank())</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(service_interval_count_full,
+       <span class="kw">aes</span>(<span class="kw">as.Date</span>(day), <span class="kw">as.POSIXlt</span>(interval, <span class="dt">format =</span> <span class="st">&quot;%H:%M&quot;</span>), <span class="dt">fill =</span> n)) +
+<span class="st">  </span><span class="kw">geom_tile</span>() +<span class="st"> </span><span class="kw">scale_fill_gradient</span>(<span class="dt">low=</span><span class="st">&quot;green&quot;</span>, <span class="dt">high=</span><span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_datetime</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;2 hour&quot;</span>),
+                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%H:%M&quot;</span>)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;15 Minutes Time Interval&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<div class="figure">
 <img src="http://www.luckyrandom.com/blog/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
+<p class="caption">plot of chunk plot_interval_heatmap_no_na</p>
+</div>
 </div>
 <h1 id="session-info">Session info</h1>
 Print session info for the good of reproducibility.
 <div class="code_chunk">
-<pre class="r"><code>devtools::session_info()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">session_info</span>()</code></pre></div>
 <pre><code>## Session info --------------------------------------------------------------</code></pre>
 <pre><code>##  setting  value                       
 ##  version  R version 3.2.0 (2015-04-16)
@@ -1830,19 +1788,19 @@ Print session info for the good of reproducibility.
     <author></author>
     <link>http://www.luckyrandom.com/blog/articles/00040-Manipulate-semantic-tree-of-R-language/</link>
     <guid isPermaLink="true">http://www.luckyrandom.com/blog/articles/00040-Manipulate-semantic-tree-of-R-language/</guid>
-    <pubDate>Sun, 09 Nov 2014 21:30:00 -0600</pubDate>
+    <pubDate>Sun, 09 Nov 2014 21:30:00 -0800</pubDate>
     <description><![CDATA[ <p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
 <p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as is</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s &lt;- s + x})
-quote_for</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for &lt;-<span class="st"> </span><span class="kw">quote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s &lt;-<span class="st"> </span>s +<span class="st"> </span>x})
+quote_for</code></pre></div>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + x
 ## }</code></pre>
 <p>It works on semantic level, so the input must be a valid R expression,</p>
-<pre class="r"><code>## This will lead to an error
-## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## This will lead to an error
+## quote(for(x in 1:3 in 2:4){ s &lt;- s + x})</code></pre></div>
 <p>The returned result is a R language object, composed of calls and symbols. We can get elements from the semantic tree,</p>
-<pre class="r"><code>quote_for[[1]]; quote_for[[2]]; quote_for[[3]]; quote_for[[4]];</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for[[<span class="dv">1</span>]]; quote_for[[<span class="dv">2</span>]]; quote_for[[<span class="dv">3</span>]]; quote_for[[<span class="dv">4</span>]];</code></pre></div>
 <pre><code>## `for`</code></pre>
 <pre><code>## x</code></pre>
 <pre><code>## 1:3</code></pre>
@@ -1850,47 +1808,47 @@ quote_for</code></pre>
 ##     s &lt;- s + x
 ## }</code></pre>
 <p>and even set elements,</p>
-<pre class="r"><code>quote_for[[3]] &lt;- quote(1:10)
-quote_for</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for[[<span class="dv">3</span>]] &lt;-<span class="st"> </span><span class="kw">quote</span>(<span class="dv">1</span>:<span class="dv">10</span>)
+quote_for</code></pre></div>
 <pre><code>## for (x in 1:10) {
 ##     s &lt;- s + x
 ## }</code></pre>
-<pre class="r"><code>s  &lt;- 0
-eval(quote_for)
-s</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s  &lt;-<span class="st"> </span><span class="dv">0</span>
+<span class="kw">eval</span>(quote_for)
+s</code></pre></div>
 <pre><code>## [1] 55</code></pre>
 <p>The function <code>substitute(expr, env)</code> substitute elements in semantic tree. Its behavior is unnecessarily complex, - If the argument <code>env</code> is <code>.GlobalEnv</code>, works the same as <code>quote</code>, without any substitute - If the argument <code>env</code> is not <code>.GlobalEnv</code> - If the argument <code>expr</code> is a promise object, get the expression slot of the promise without any substitute. The is typically used to capture unevaluated expression from caller function. - If the argument <code>expr</code> is not a promise object, substitute the unevaluated semantic tree of <code>expr</code> using the bound in <code>env</code></p>
 <p>This is a very bad design, that a function might do totally different things depending on the running environment. Such a complex design makes it hard to guess its behavior.</p>
 <p>Following suggestions in book <em>Advanced R</em>, we define a few helper functions, each of which does only one job clearly. Note the name of functions are different from Advanced R. The suffix <code>*_s</code> means standard evaluation, so it’s the caller’s responsibility to quote code explicitly; <code>*_q</code> means the arguments are quoted automatically. Lisp users may find name <code>*_q</code> familiar, similar to <code>setq</code>.</p>
-<pre class="r"><code>## The definition here may be hard to follow. Please focus on the
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The definition here may be hard to follow. Please focus on the
 ## usage explained below, instead of the ugly implementation. If you
 ## are curiouse about the implementation, please read Advaned R.
-substitute_q &lt;- function(expr, env = emptyenv()) {
-  expr &lt;- substitute(expr)
-  if (identical(env, globalenv())) {
-    env &lt;- as.list(env)
+substitute_q &lt;-<span class="st"> </span>function(expr, <span class="dt">env =</span> <span class="kw">emptyenv</span>()) {
+  expr &lt;-<span class="st"> </span><span class="kw">substitute</span>(expr)
+  if (<span class="kw">identical</span>(env, <span class="kw">globalenv</span>())) {
+    env &lt;-<span class="st"> </span><span class="kw">as.list</span>(env)
   }
-  eval(substitute(substitute(expr, env), list(expr = expr)))
+  <span class="kw">eval</span>(<span class="kw">substitute</span>(<span class="kw">substitute</span>(expr, env), <span class="kw">list</span>(<span class="dt">expr =</span> expr)))
 }
 
-substitute_s &lt;- function(expr, env = emptyenv()) {
-  call &lt;- substitute_q(substitute_q(x, env), list(x = expr))
-  eval(call)
-}</code></pre>
+substitute_s &lt;-<span class="st"> </span>function(expr, <span class="dt">env =</span> <span class="kw">emptyenv</span>()) {
+  call &lt;-<span class="st"> </span><span class="kw">substitute_q</span>(<span class="kw">substitute_q</span>(x, env), <span class="kw">list</span>(<span class="dt">x =</span> expr))
+  <span class="kw">eval</span>(call)
+}</code></pre></div>
 <p><code>substitute_s</code> substitute the symbols in <code>expr</code> at lexical basis. For example,</p>
-<pre class="r"><code>quote_for &lt;- quote(for(x in 1:3){ s  &lt;- s + x})
-substitute_s(quote_for, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quote_for &lt;-<span class="st"> </span><span class="kw">quote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>x})
+<span class="kw">substitute_s</span>(quote_for, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>
 <p><code>substitute_q</code> works similarly, but it quote the argument <code>expr</code> automatically, so the caller doesn’t need to quote the code and must pass the argument <code>expr</code> lexically. It seems to be convenient, but may cause some issue since we cannot pass the quoted code saved in a variable to <code>substitute_q</code>.</p>
-<pre class="r"><code>substitute_q(for(x in 1:3){ s  &lt;- s + x}, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">substitute_q</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>x}, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (y in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>
 <p><code>bquote</code> is similar but provides better control. It return unevaluated semantic tree, and only substitute symbols wrapped in <code>.()</code>.</p>
-<pre class="r"><code>## The result is not meaningful. Why do I do that? Because I can.
-bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The result is not meaningful. Why do I do that? Because I can.
+<span class="kw">bquote</span>(for(x in <span class="dv">1</span>:<span class="dv">3</span>){ s  &lt;-<span class="st"> </span>s +<span class="st"> </span>.(x)}, <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">quote</span>(y)))</code></pre></div>
 <pre><code>## for (x in 1:3) {
 ##     s &lt;- s + y
 ## }</code></pre>
@@ -1904,7 +1862,7 @@ bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
     <author></author>
     <link>http://www.luckyrandom.com/blog/articles/00030-R-library-search-path/</link>
     <guid isPermaLink="true">http://www.luckyrandom.com/blog/articles/00030-R-library-search-path/</guid>
-    <pubDate>Tue, 22 Jul 2014 17:00:00 -0500</pubDate>
+    <pubDate>Tue, 22 Jul 2014 17:00:00 -0700</pubDate>
     <description><![CDATA[ <p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different directory,</p>
 <ul>
 <li>‘.Library’ is a character string giving the location of the defualt library, with default value <code>$R_HOME/library</code></li>
@@ -1936,7 +1894,7 @@ bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
     <author></author>
     <link>http://www.luckyrandom.com/blog/articles/00020-R-startup-mechanism/</link>
     <guid isPermaLink="true">http://www.luckyrandom.com/blog/articles/00020-R-startup-mechanism/</guid>
-    <pubDate>Sat, 19 Jul 2014 12:30:00 -0500</pubDate>
+    <pubDate>Sat, 19 Jul 2014 12:30:00 -0700</pubDate>
     <description><![CDATA[ <p>R startup with the following steps,</p>
 <ul>
 <li>Set environment variables unless ’–no-environ was given on the command line</li>
@@ -1963,14 +1921,14 @@ bquote(for(x in 1:3){ s  &lt;- s + .(x)}, list(x = quote(y)))</code></pre>
     <author></author>
     <link>http://www.luckyrandom.com/blog/articles/00010-some-test/</link>
     <guid isPermaLink="true">http://www.luckyrandom.com/blog/articles/00010-some-test/</guid>
-    <pubDate>Mon, 01 Oct 2012 15:00:00 -0500</pubDate>
+    <pubDate>Mon, 01 Oct 2012 15:00:00 -0700</pubDate>
     <description><![CDATA[ <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>. The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
 <p><span class="more"></span></p>
 <h3 id="javascript">JavaScript</h3>
-<pre class="javascript"><code>function getRandomNumber() {
-    return 4; // chosen by fair dice roll.
-              // guaranteed to be random.
-}</code></pre>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">getRandomNumber</span>() <span class="op">{</span>
+    <span class="cf">return</span> <span class="dv">4</span><span class="op">;</span> <span class="co">// chosen by fair dice roll.</span>
+              <span class="co">// guaranteed to be random.</span>
+<span class="op">}</span></code></pre></div>
 <h3 id="coffeescript">CoffeeScript</h3>
 <pre class="coffeescript"><code>class Animal
   ### Intellegent design ###
@@ -1987,59 +1945,59 @@ class Human extends Monkey
   speak: -&gt;
     print [&#39;yolo&#39; unless i % 3] + [&#39;swag&#39; unless i % 5] or i for i in [1..100]</code></pre>
 <h3 id="c">C</h3>
-<pre class="c"><code>#include &lt;stdio.h&gt;
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
 
-int main(void)
+<span class="dt">int</span> main(<span class="dt">void</span>)
 {
-  printf(&quot;Hello world\n&quot;);
-  return 0;
-}</code></pre>
+  printf(<span class="st">&quot;Hello world</span><span class="ch">\n</span><span class="st">&quot;</span>);
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="c-1">C++</h3>
-<pre class="cpp"><code>#include &lt;iostream&gt;
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
 
-int main()
+<span class="dt">int</span> main()
 {
-  std::cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; std::endl;
-  return 0;
-}</code></pre>
+  std::cout &lt;&lt; <span class="st">&quot;Hello World!&quot;</span> &lt;&lt; std::endl;
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="c-sharp">C-sharp</h3>
-<pre class="cs"><code>class ExampleClass
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">class</span> ExampleClass
 {
-    static void Main()
+    <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
     {
-        System.Console.WriteLine(&quot;Hello, world!&quot;);
+        System.<span class="fu">Console</span>.<span class="fu">WriteLine</span>(<span class="st">&quot;Hello, world!&quot;</span>);
     }
-}</code></pre>
+}</code></pre></div>
 <h3 id="erlang">Erlang</h3>
-<pre class="erlang"><code>io:format(&quot;~s~n&quot;, [&quot;hello, world&quot;])</code></pre>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">io:format(</span><span class="st">&quot;~s~n&quot;</span><span class="fu">,</span> <span class="fu">[</span><span class="st">&quot;hello, world&quot;</span><span class="fu">])</span></code></pre></div>
 <h3 id="go">Go</h3>
-<pre class="go"><code>package main
+<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">package</span> main
 
-import &quot;fmt&quot;
+<span class="kw">import</span> <span class="st">&quot;fmt&quot;</span>
 
-func main() {
-   fmt.Println(&quot;Hello World!&quot;)
-}</code></pre>
+<span class="kw">func</span> main() {
+   fmt.Println(<span class="st">&quot;Hello World!&quot;</span>)
+}</code></pre></div>
 <h3 id="java">Java</h3>
-<pre class="java"><code>public class HelloWorld {
-   public static void main(String[] args) {
-       System.out.println(&quot;Hello world!&quot;);
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> HelloWorld {
+   <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(String[] args) {
+       System.<span class="fu">out</span>.<span class="fu">println</span>(<span class="st">&quot;Hello world!&quot;</span>);
    }
-}</code></pre>
+}</code></pre></div>
 <h3 id="objectivec">ObjectiveC</h3>
-<pre class="objectivec"><code>#import &lt;stdio.h&gt;
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="ot">#import &lt;stdio.h&gt;</span>
 
-int main(void)
+<span class="dt">int</span> main(<span class="dt">void</span>)
 {
-    printf(&quot;Hello, World!\n&quot;);
-    return 0;
-}</code></pre>
+    printf(<span class="st">&quot;Hello, World!</span><span class="ch">\n</span><span class="st">&quot;</span>);
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
 <h3 id="php">PHP</h3>
-<pre class="php"><code>&lt;?php echo &#39;Hello, world&#39;; ?&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span> <span class="fu">echo</span> <span class="st">&#39;Hello, world&#39;</span><span class="ot">;</span> <span class="kw">?&gt;</span></code></pre></div>
 <h3 id="python">Python</h3>
-<pre class="python"><code>print(&quot;Hello World&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span>(<span class="st">&quot;Hello World&quot;</span>)</code></pre></div>
 <h3 id="ruby">Ruby</h3>
-<pre class="ruby"><code>puts &quot;Hello world!&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">puts <span class="st">&quot;Hello world!&quot;</span></code></pre></div>
  ]]></description>
   </item>
   
