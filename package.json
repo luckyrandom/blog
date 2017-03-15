@@ -5,7 +5,10 @@
     "moment": "2.3.x",
     "underscore": "1.4.x",
     "typogr": "0.5.x",
-    "wintersmith-asis": "^0.1.3"
+    "wintersmith-coffee": "0.2.2",
+    "wintersmith-asis": "^0.1.3",
+    "wintersmith-pandoc": "^0.2.3",
+    "wintersmith-tag": "^1.0.2"
   },
   "repository": "none"
 }
