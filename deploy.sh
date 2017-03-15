@@ -26,7 +26,7 @@ source build.sh
   ## Push all files to the gh-pages branch
   git add --all * ## The --all option is need to track removals
   git commit -m "deploy from commit ${SRC_COMMIT_ID}"
-  git push --set-upstream origin gh-pages
+  git push --set-upstream -f origin master:gh-pages
   )
 
 git push
