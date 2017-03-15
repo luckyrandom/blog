@@ -18,7 +18,7 @@
 		<meta property="og:type" content="blog">
 		<meta property="og:description" content="">
 
-    <link rel="canonical" href="http://www.luckyrandom.com/articles/00030-R-library-search-path/"/>
+    <link rel="canonical" href="http://blog.luckyrandom.com/articles/00030-R-library-search-path/"/>
     <title>R library search path - luckyrandom.com/blog/</title>
     <link rel="stylesheet" href="/css/main.css" type="text/css">
     <link rel="stylesheet" href="/highlight/styles/tomorrow.css">
@@ -48,10 +48,28 @@
 				<div class="article">
                                   <h1 class="title">R library search path</h1>
                                   <div class="post-date">2014-07-22</div>
+
                                   <div class="share-button">
-                                  <a href="https://twitter.com/share" class="twitter-share-button" data-via="luckyrand" data-text = "R library search path">Tweet</a>
-                                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                    <!-- twitter share button -->
+                                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="luckyrand" data-text = "R library search path">Tweet</a>
+                                    <script>window.twttr = (function(d, s, id) {
+                                      var js, fjs = d.getElementsByTagName(s)[0],
+                                      t = window.twttr || {};
+                                      if (d.getElementById(id)) return t;
+                                      js = d.createElement(s);
+                                      js.id = id;
+                                      js.src = "https://platform.twitter.com/widgets.js";
+                                      fjs.parentNode.insertBefore(js, fjs);
+
+                                      t._e = [];
+                                      t.ready = function(f) {
+                                      t._e.push(f);
+                                      };
+
+                                      return t;
+                                      }(document, "script", "twitter-wjs"));</script>
                                   </div>
+                                  
                                   
 					<p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different directory,</p>
 <ul>

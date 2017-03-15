@@ -10,8 +10,8 @@
   <item>
     <title>Big data analytics with dplyr and SQLite</title>
     <author></author>
-    <link>http://www.luckyrandom.com/articles/00050-311-service/</link>
-    <guid isPermaLink="true">http://www.luckyrandom.com/articles/00050-311-service/</guid>
+    <link>http://blog.luckyrandom.com/articles/00050-311-service/</link>
+    <guid isPermaLink="true">http://blog.luckyrandom.com/articles/00050-311-service/</guid>
     <pubDate>Wed, 29 Apr 2015 18:00:00 -0700</pubDate>
     <description><![CDATA[ <style type="text/css">
 div.code_chunk {
@@ -865,7 +865,7 @@ ordered_asis &lt;-<span class="st"> </span>function(x) {
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span> ) +<span class="st"> </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
 <span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>))</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_agency-1.png" alt="plot of chunk plot_complaints_by_agency" />
 <p class="caption">plot of chunk plot_complaints_by_agency</p>
 </div>
 </div>
@@ -954,7 +954,7 @@ service %&gt;%
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>))</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_by_type-1.png" alt="plot of chunk plot_complaints_by_type" />
 <p class="caption">plot of chunk plot_complaints_by_type</p>
 </div>
 </div>
@@ -1026,7 +1026,7 @@ city_top &lt;-<span class="st"> </span>city_ordered[<span class="dv">1</span>:<s
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="dv">1</span>),
         <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>))</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_city_type-1.png" alt="plot of chunk plot_complaints_city_type" />
 <p class="caption">plot of chunk plot_complaints_city_type</p>
 </div>
 </div>
@@ -1042,7 +1042,7 @@ city_top &lt;-<span class="st"> </span>city_ordered[<span class="dv">1</span>:<s
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">vjust =</span> <span class="dv">1</span>),
         <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>))</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city-1.png" alt="plot of chunk plot_complaints_type_city" />
 <p class="caption">plot of chunk plot_complaints_type_city</p>
 </div>
 </div>
@@ -1060,7 +1060,7 @@ And if we are more interested in proportion of complaint type for each city.
         <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="dv">14</span>, <span class="st">&quot;points&quot;</span>),
         <span class="dt">panel.grid.major.y =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.grid.minor.y =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaints_type_city_fill-1.png" alt="plot of chunk plot_complaints_type_city_fill" />
 <p class="caption">plot of chunk plot_complaints_type_city_fill</p>
 </div>
 </div>
@@ -1346,7 +1346,7 @@ get_hour &lt;-<span class="st"> </span>function(x) <span class="kw">substr</span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(hour_count, <span class="kw">aes</span>(<span class="dt">x =</span> hour, <span class="dt">y =</span> n)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour_large_0-1.png" alt="plot of chunk plot_complaint_by_hour_large_0" />
 <p class="caption">plot of chunk plot_complaint_by_hour_large_0</p>
 </div>
 </div>
@@ -1432,7 +1432,7 @@ Those “00:00:00” must mean NA.
        <span class="kw">aes</span>(<span class="dt">x =</span> hour, <span class="dt">y =</span> n)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_complaint_by_hour-1.png" alt="plot of chunk plot_complaint_by_hour" />
 <p class="caption">plot of chunk plot_complaint_by_hour</p>
 </div>
 </div>
@@ -1549,7 +1549,7 @@ Those “00:00:00” must mean NA.
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Number of complaints&quot;</span>) +<span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#01AFE1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#01AFE1&quot;</span>)</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_noise_hour-1.png" alt="plot of chunk plot_noise_hour" />
 <p class="caption">plot of chunk plot_noise_hour</p>
 </div>
 </div>
@@ -1594,7 +1594,7 @@ Count complatins by 15 minute interval
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">comma_format</span>()) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>)</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_hour_type-1.png" alt="plot of chunk plot_hour_type" />
 <p class="caption">plot of chunk plot_hour_type</p>
 </div>
 </div>
@@ -1658,7 +1658,7 @@ service_interval &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Time Interval&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap-1.png" alt="plot of chunk plot_interval_heatmap" />
 <p class="caption">plot of chunk plot_interval_heatmap</p>
 </div>
 </div>
@@ -1733,7 +1733,7 @@ service_interval &lt;-<span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;15 Minutes Time Interval&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <div class="figure">
-<img src="http://www.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
+<img src="http://blog.luckyrandom.com/articles/00050-311-service/figure/plot_interval_heatmap_no_na-1.png" alt="plot of chunk plot_interval_heatmap_no_na" />
 <p class="caption">plot of chunk plot_interval_heatmap_no_na</p>
 </div>
 </div>
@@ -1786,8 +1786,8 @@ Print session info for the good of reproducibility.
   <item>
     <title>Manipulate semantic tree of R language</title>
     <author></author>
-    <link>http://www.luckyrandom.com/articles/00040-Manipulate-semantic-tree-of-R-language/</link>
-    <guid isPermaLink="true">http://www.luckyrandom.com/articles/00040-Manipulate-semantic-tree-of-R-language/</guid>
+    <link>http://blog.luckyrandom.com/articles/00040-Manipulate-semantic-tree-of-R-language/</link>
+    <guid isPermaLink="true">http://blog.luckyrandom.com/articles/00040-Manipulate-semantic-tree-of-R-language/</guid>
     <pubDate>Sun, 09 Nov 2014 21:30:00 -0800</pubDate>
     <description><![CDATA[ <p><em>This is basically a reading note on chapter <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">Non-standard evaluation of book The Advanced R</a>.</em></p>
 <p>R provides a few functions that expose and manipulate the semantic tree of R language. The simplest one is <code>quote</code>, which return the semantic tree as is</p>
@@ -1860,8 +1860,8 @@ substitute_s &lt;-<span class="st"> </span>function(expr, <span class="dt">env =
   <item>
     <title>R library search path</title>
     <author></author>
-    <link>http://www.luckyrandom.com/articles/00030-R-library-search-path/</link>
-    <guid isPermaLink="true">http://www.luckyrandom.com/articles/00030-R-library-search-path/</guid>
+    <link>http://blog.luckyrandom.com/articles/00030-R-library-search-path/</link>
+    <guid isPermaLink="true">http://blog.luckyrandom.com/articles/00030-R-library-search-path/</guid>
     <pubDate>Tue, 22 Jul 2014 17:00:00 -0700</pubDate>
     <description><![CDATA[ <p>When ‘library()’ or ‘require()’ is called, R load packages from library search paths, which consists of three different directory,</p>
 <ul>
@@ -1892,8 +1892,8 @@ substitute_s &lt;-<span class="st"> </span>function(expr, <span class="dt">env =
   <item>
     <title>R startup mechanism</title>
     <author></author>
-    <link>http://www.luckyrandom.com/articles/00020-R-startup-mechanism/</link>
-    <guid isPermaLink="true">http://www.luckyrandom.com/articles/00020-R-startup-mechanism/</guid>
+    <link>http://blog.luckyrandom.com/articles/00020-R-startup-mechanism/</link>
+    <guid isPermaLink="true">http://blog.luckyrandom.com/articles/00020-R-startup-mechanism/</guid>
     <pubDate>Sat, 19 Jul 2014 12:30:00 -0700</pubDate>
     <description><![CDATA[ <p>R startup with the following steps,</p>
 <ul>
@@ -1919,8 +1919,8 @@ substitute_s &lt;-<span class="st"> </span>function(expr, <span class="dt">env =
   <item>
     <title>Code and stuff!</title>
     <author></author>
-    <link>http://www.luckyrandom.com/articles/00010-some-test/</link>
-    <guid isPermaLink="true">http://www.luckyrandom.com/articles/00010-some-test/</guid>
+    <link>http://blog.luckyrandom.com/articles/00010-some-test/</link>
+    <guid isPermaLink="true">http://blog.luckyrandom.com/articles/00010-some-test/</guid>
     <pubDate>Mon, 01 Oct 2012 15:00:00 -0700</pubDate>
     <description><![CDATA[ <p>Syntax highlighting with <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>. The theme used is tomorrow, you can find more themes <a href="http://jmblog.github.io/color-themes-for-highlightjs/">here</a>.</p>
 <p><span class="more"></span></p>
