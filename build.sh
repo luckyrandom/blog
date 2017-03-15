@@ -14,5 +14,5 @@ set -e
  done)
 
 rm -rf build/*
-wintersmith build
+node_modules/wintersmith/bin/wintersmith build
 
