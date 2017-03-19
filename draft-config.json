@@ -1,16 +1,20 @@
 {
   "locals": {
-    "url": "http://localhost:8080",
+    "url": "http://blog.luckyrandom.com",
+    "blog_base_url": "http://blog.luckyrandom.com/",
     "name": "The Luckyrandom's blog",
     "owner": "Chenliang Xu",
-    "description": "Some notes for myself 6 months later"
+    "description": "I enjoy thinking; I know statistics; I can code."
   },
   "plugins": [
     "./node_modules/wintersmith-coffee/plugin.coffee",
     "wintersmith-nunjucks",
     "./plugins/contentHelpers.js",
     "wintersmith-asis",
-    "./plugins/paginator.coffee"
+    "./plugins/paginator.coffee",
+    "./node_modules/wintersmith-pandoc/",
+    "wintersmith-tag",
+    "./plugins/tag_feed.coffee"
   ],
   "require": {
     "moment": "moment",
@@ -24,13 +28,21 @@
   },
   "paginator": {
     "template": "index.html",
-    "perPage": 3
+    "perPage": 5
   },
   "ignore": [
+    "articles/*.mk",
+    "articles/*/Makefile",
     "**/config.rb",
     "**/sass",
     "**/.sass-cache",
     "**/.DS_Store",
-    "s3RoutingRules.xml"
-  ]
+    "**/*.Rmd",
+    "**/.gitignore",
+    "s3RoutingRules.xml",
+    "articles/*/cache/**",
+    "articles/*/noshare/**",
+    "**/.#**"
+  ],
+  "baseUrl": "/"
 }
